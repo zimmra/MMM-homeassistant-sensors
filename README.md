@@ -1,5 +1,5 @@
 # MMM-homeassistant-feed
-A MagicMirror module that displays information from homeassistant API.
+A MagicMirror module that displays information from homeassistant REST API.
 
 This code is partially copied from https://github.com/amcolash/MMM-json-feed.
 
@@ -11,11 +11,11 @@ It is very simple to set up this module, a sample configuration looks like this:
 modules: [
   {
     module: 'MMM-homeassistant-sensors',
-    position: 'bottom_left',
+    position: 'top_left',
     config: {
-      url: 'http://youehomeassistant:8123/api/states',
-      prettyName : 'true',
-      stripName: 'true',
+      url: 'https://youehomeassistant:8123/api/states?api_password=secret',
+      prettyName : 'false',
+      stripName: 'false',
       values: ["cover.office", "sensor.owm_pressure"]
     }
   }
