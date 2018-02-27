@@ -39,15 +39,16 @@ Module.register("MMM-homeassistant-sensors", {
 				for (var i = 0; i < values.length; i++) {
 					var val = this.getValue(data, values[i]);
 					var name = this.getName(data, values[i]);
+					var unit = this.getUnit(data, values[i]);
 					if (val) {
-						tableElement.appendChild(this.addValue(name, val));
+						tableElement.appendChild(this.addValue(name, val, unit));
 					}
 				}
 			}
 			else {
 				for (var key in data) {
 					if (data.hasOwnProperty(key)) {
-						tableElement.appendChild(this.addValue(key, data[key]));
+						tableElement.appendChild(this.addValue(key, data[key], ""));
 					}
 				}
 			}
@@ -63,27 +64,32 @@ Module.register("MMM-homeassistant-sensors", {
 	getValue: function(data, value) {
 		for(var i=0; i<data.length;i++){
 			if (data[i].entity_id == value){
-				console.log(data[i].state + " " + data[i].attributes.unit_of_measurement);
-				var unit = "";
-				if (data[i].attributes.unit_of_measurement != undefined) {
-					unit = data[i].attributes.unit_of_measurement;
-				}
-				return data[i].state + " " + unit;
+				return data[i].state;
 		   }
 		}
 		return null;
 	},
+	getUnit: function(data, value) {
+		for(var i=0; i<data.length;i++){
+			if (data[i].entity_id == value){
+				if (typeof data[i].attributes.unit_of_measurement !== "undefined") {
+					return data[i].attributes.unit_of_measurement;
+				}
+				return "";
+		   }
+		}
+		return "";
+	},
 	getName: function(data, value) {
 		for(var i=0; i<data.length;i++){
 			if (data[i].entity_id == value){
-				console.log(data[i].attributes.friendly_name);
 				return data[i].attributes.friendly_name;
 			}
 		}
 		return null;
 	},
-	addValue: function(name, value) {
-		var newrow, newText, namecell, valuecell;
+	addValue: function(name, value, unit) {
+		var newrow, newText, newCell;
 		newrow = document.createElement("tr");
 		if (this.config.stripName) {
 			var split = name.split(".");
@@ -94,13 +100,20 @@ Module.register("MMM-homeassistant-sensors", {
 			name = name.split("_").join(" ");
 			name = name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 		}
-		namecell = newrow.insertCell(0);
+		// Name
+		newCell = newrow.insertCell(0);
 		newText  = document.createTextNode(name);
-		namecell.appendChild(newText);
-		valuecell = newrow.insertCell(1);
+		newCell.appendChild(newText);
+		// Value
+		newCell = newrow.insertCell(1);
+		newCell.className = "align-right"
 		newText  = document.createTextNode(value);
-		valuecell.appendChild(newText);
-		// newrow.innerHTML = name + ": " + value;
+		newCell.appendChild(newText);
+		// Unit
+		newCell = newrow.insertCell(2);
+		newCell.className = "align-left"
+		newText  = document.createTextNode(unit);
+		newCell.appendChild(newText);
 		return newrow;
 	},
 	scheduleUpdate: function(delay) {
