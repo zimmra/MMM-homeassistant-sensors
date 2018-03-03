@@ -6,6 +6,10 @@ It can display information from [Home Assistant](https://home-assistant.io/) usi
 Navigate into your MagicMirror's `modules` folder and clone this repository. 
 `cd ~\MagicMirror\modules && git clone https://github.com/leinich/MMM-homeassistant-sensors.git`
 
+In cases you want to use icons for the sensor please perform following:
+Download the MaterialDesignIcons Webfont from https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip and unzip the folder
+`wget https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip && unzip master.zip`
+
 ## Configuration
 It is very simple to set up this module, a sample configuration looks like this:
 
@@ -18,7 +22,14 @@ It is very simple to set up this module, a sample configuration looks like this:
 | `title`              | Title to display at the top of the module. <br><br> **Default value: ** `Home Assistant` |
 | `url`                | The url of the homeassitant api . <br><br> **Default value:** `REQUIRED` |
 | `updateInterval`     | The time between updates (In milliseconds). / <br><br> **Default value:** `300000 (5 minutes)` |
-| `values`             | Specify specific values from the json feed to only show what you need (entity_id). <br><br>**Example:** `["key1", "key2", "keyA.keyB.keyC"]`<br> **Default value:** `[]` (Shows all keys in the object) |
+| `values`             | Specify specific values from the json feed to only show what you need (entity_id). |
+
+## values option
+| Option               | Description |
+| -------------------- | ----------- |
+| `sensor`             | entity_id as of home-assistant. Please hav a look at teh states pages for the unique entity_id of your sensor |
+| `symbol`             | a icon for the sensor. please see: [MaterialDesignIcons](https://materialdesignicons.com/) |
+
 
 Here is an example of an entry in `config.js`
 ```
@@ -30,7 +41,11 @@ modules: [
       url: 'https://youehomeassistant:8123/api/states?api_password=secret',
       prettyName : false,
       stripName: false,
-      values: ["cover.office", "sensor.owm_pressure"]
+      values: [
+	    {symbol: "blinds", sensor: "cover.office"},
+	    {symbol: "lightbulb", sensor: "light.kitchen"},
+		{symbol: "arrow-collapse-down", sensor: "sensor.owm_pressure" }
+	  ]
     }
   }
 ]
