@@ -42,7 +42,7 @@ Module.register("MMM-homeassistant-sensors", {
 			var values = this.config.values;
 			if (values.length > 0) {
 				for (var i = 0; i < values.length; i++) {
-					var icons = values[i].icons;
+					var icons = values[i].icons[0];
 					var sensor = values[i].sensor;
 					var val = this.getValue(data, sensor);
 					var name = this.getName(data, sensor);
@@ -118,18 +118,18 @@ Module.register("MMM-homeassistant-sensors", {
 			if (typeof icons === "object") {
 				var iconsinline;
 				//Change icons based on HA status
-				if (value == "on" && typeof icons[0].state_on === "string") {
+				if (value == "on" && typeof icons.state_on === "string") {
 					iconsinline = document.createElement("i");
-					iconsinline.className = "mdi mdi-" + icons[0].state_on;
+					iconsinline.className = "mdi mdi-" + icons.state_on;
 					newCell.appendChild(iconsinline);
-				} else if (value == "off" && typeof icons[0].state_off === "string") {
+				} else if (value == "off" && typeof icons.state_off === "string") {
 					iconsinline = document.createElement("i");
-					iconsinline.className = "mdi mdi-" + icons[0].state_off;
+					iconsinline.className = "mdi mdi-" + icons.state_off;
 					newCell.appendChild(iconsinline);
 				} else {
-					if (typeof icons[0].default === "string") {
+					if (typeof icons.default === "string") {
 						iconsinline = document.createElement("i");
-						iconsinline.className = "mdi mdi-" + icons[0].default;
+						iconsinline.className = "mdi mdi-" + icons.default;
 						newCell.appendChild(iconsinline);
 					}
 				}
