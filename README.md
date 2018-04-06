@@ -28,26 +28,51 @@ It is very simple to set up this module, a sample configuration looks like this:
 | Option               | Description |
 | -------------------- | ----------- |
 | `sensor`             | entity_id as of home-assistant. Please hav a look at teh states pages for the unique entity_id of your sensor |
-| `symbol`             | a icon for the sensor. please see: [MaterialDesignIcons](https://materialdesignicons.com/) |
+| `icons`             | an icons object for the on/off status of sensor. please see: [MaterialDesignIcons](https://materialdesignicons.com/) |
 
+## icons option
+| Option               | Description |
+| -------------------- | ----------- |
+| `default`             | default icon of the sensor |
+| `state_on`             | on status icon of the sensor |
+| `state_off`             | off status icon of the sensor |
 
 Here is an example of an entry in `config.js`
 ```
-modules: [
-  {
-    module: 'MMM-homeassistant-sensors',
-    position: 'top_left',
-    config: {
-      url: 'https://youehomeassistant:8123/api/states?api_password=secret',
-      prettyName : false,
-      stripName: false,
-      values: [
-	    {symbol: "blinds", sensor: "cover.office"},
-	    {symbol: "lightbulb", sensor: "light.kitchen"},
-		{symbol: "arrow-collapse-down", sensor: "sensor.owm_pressure" }
-	  ]
-    }
-  }
+modules: [{
+		module: 'MMM-homeassistant-sensors',
+		position: 'top_left',
+		config: {
+			url: 'https://youehomeassistant:8123/api/states?api_password=secret',
+			prettyName: false,
+			stripName: false,
+			values: [{
+					sensor: "sensor.processor_use",
+					icons: [{
+							"default": "chip"
+						}
+					]
+				}, {
+					sensor: "binary_sensor.sensor",
+					icons: [{
+							"default": "run",
+							"state_off": "run",
+							"state_on": "run-fast"
+						}
+					]
+				}, {
+					sensor: "switch.reception_spot",
+					icons: [{
+							"default": "lightbulb-outline",
+							"state_off": "lightbulb-outline",
+							"state_on": "lightbulb-on-outline"
+						}
+					]
+				}
+			]
+
+		}
+	}
 ]
 ```
 
