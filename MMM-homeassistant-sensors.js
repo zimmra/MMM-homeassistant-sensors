@@ -42,13 +42,13 @@ Module.register("MMM-homeassistant-sensors", {
 			var values = this.config.values;
 			if (values.length > 0) {
 				for (var i = 0; i < values.length; i++) {
-					var symbol = values[i].symbol;
+					var icons = values[i].icons;
 					var sensor = values[i].sensor;
 					var val = this.getValue(data, sensor);
 					var name = this.getName(data, sensor);
 					var unit = this.getUnit(data, sensor);
 					if (val) {
-						tableElement.appendChild(this.addValue(name, val, unit, symbol));
+						tableElement.appendChild(this.addValue(name, val, unit, icons));
 					}
 				}
 			} else {
@@ -93,7 +93,7 @@ Module.register("MMM-homeassistant-sensors", {
 		}
 		return null;
 	},
-	addValue: function (name, value, unit, symbol) {
+	addValue: function (name, value, unit, icons) {
 		var newrow,
 		newText,
 		newCell;
@@ -111,24 +111,28 @@ Module.register("MMM-homeassistant-sensors", {
 					return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 				});
 		}
-		// Symbol
+		// icons
 		newCell = newrow.insertCell(0);
 		newCell.className = "align-left";
 		if (this.config.displaySymbol) {
-			if (typeof symbol === "string") {
-				var symbolinline = document.createElement("i");
-				//Change icon based on HA status - For Motion & Light
-				if (value != "on") {
-					symbolinline.className = "mdi mdi-" + symbol;
+			if (typeof icons === "object") {
+				var iconsinline;
+				//Change icons based on HA status
+				if (value == "on" && typeof icons[0].state_on === "string") {
+					iconsinline = document.createElement("i");
+					iconsinline.className = "mdi mdi-" + icons[0].state_on;
+					newCell.appendChild(iconsinline);
+				} else if (value == "off" && typeof icons[0].state_off === "string") {
+					iconsinline = document.createElement("i");
+					iconsinline.className = "mdi mdi-" + icons[0].state_off;
+					newCell.appendChild(iconsinline);
 				} else {
-					if (name.includes('Spot') && value == "on") {
-						symbolinline.className = "mdi mdi-lightbulb-on";
-					}
-					if (name.includes('Motion') && value == "on") {
-						symbolinline.className = "mdi mdi-run-fast";
+					if (typeof icons[0].default === "string") {
+						iconsinline = document.createElement("i");
+						iconsinline.className = "mdi mdi-" + icons[0].default;
+						newCell.appendChild(iconsinline);
 					}
 				}
-				newCell.appendChild(symbolinline);
 			}
 		}
 		// Name
