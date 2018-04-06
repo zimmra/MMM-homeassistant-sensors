@@ -33,7 +33,7 @@ It is very simple to set up this module, a sample configuration looks like this:
 ## icons option
 | Option               | Description |
 | -------------------- | ----------- |
-| `default`             | default icon of the sensor |
+| `default`             | default icon of the sensor. In case there is no on/off status, like processor use. |
 | `state_on`             | on status icon of the sensor |
 | `state_off`             | off status icon of the sensor |
 
@@ -55,7 +55,6 @@ modules: [{
 				}, {
 					sensor: "binary_sensor.sensor",
 					icons: [{
-							"default": "run",
 							"state_off": "run",
 							"state_on": "run-fast"
 						}
@@ -63,7 +62,6 @@ modules: [{
 				}, {
 					sensor: "switch.reception_spot",
 					icons: [{
-							"default": "lightbulb-outline",
 							"state_off": "lightbulb-outline",
 							"state_on": "lightbulb-on-outline"
 						}
@@ -75,6 +73,9 @@ modules: [{
 	}
 ]
 ```
+**Result** example:
+
+![Alt text](https://image.ibb.co/b8edjx/dynamic_icons.png "dynamic icons example")
 
 ## Special Thanks
 - [Michael Teeuw](https://github.com/MichMich) for creating the awesome [MagicMirror2](https://github.com/MichMich/MagicMirror/tree/develop) project that made this module possible.
