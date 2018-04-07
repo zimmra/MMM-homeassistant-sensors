@@ -8,7 +8,7 @@ Navigate into your MagicMirror's `modules` folder and clone this repository.
 
 In cases you want to use icons for the sensor please perform following:
 Download the MaterialDesignIcons Webfont from https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip and unzip the folder
-`wget https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip && unzip master.zip`
+`cd ~\MagicMirror\modules\MMM-homeassistant-sensors && wget https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip && unzip master.zip`
 
 ## Configuration
 It is very simple to set up this module, a sample configuration looks like this:
