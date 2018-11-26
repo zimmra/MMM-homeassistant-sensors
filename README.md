@@ -3,12 +3,11 @@ This a module for the [MagicMirror](https://github.com/MichMich/MagicMirror/tree
 It can display information from [Home Assistant](https://home-assistant.io/) using the home assistant REST API.
 
 ## Installation
-Navigate into your MagicMirror's `modules` folder and clone this repository. 
-`cd ~\MagicMirror\modules && git clone https://github.com/leinich/MMM-homeassistant-sensors.git`
+Navigate into your MagicMirror's `modules` folder and clone this repository:  
+`cd ~/MagicMirror/modules && git clone https://github.com/leinich/MMM-homeassistant-sensors.git`
 
-In cases you want to use icons for the sensor please perform following:
-Download the MaterialDesignIcons Webfont from https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip and unzip the folder
-`cd ~\MagicMirror\modules\MMM-homeassistant-sensors && wget https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip && unzip master.zip`
+If you want to use icons for the sensors download the `MaterialDesignIcons` webfont from https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip and unzip the folder:  
+`cd ~/MagicMirror/modules/MMM-homeassistant-sensors && wget https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip && unzip master.zip`
 
 ## Configuration
 It is very simple to set up this module, a sample configuration looks like this:
@@ -17,25 +16,25 @@ It is very simple to set up this module, a sample configuration looks like this:
 
 | Option               | Description |
 | -------------------- | ----------- |
-| `prettyName`         | Pretty print the name of each JSON key (remove camelCase and underscores). <br><br> **Default value:** `true` |
-| `stripName`          | Removes all keys before the printed key. <br><br>**Example:** `a.b.c` will print `c`.<br> **Default value:** `true` |
-| `title`              | Title to display at the top of the module. <br><br> **Default value: ** `Home Assistant` |
-| `url`                | The url of the homeassitant api . <br><br> **Default value:** `REQUIRED` |
-| `updateInterval`     | The time between updates (In milliseconds). / <br><br> **Default value:** `300000 (5 minutes)` |
+| `prettyName`         | Pretty print the name of each JSON key (remove camelCase and underscores). <br><br> **Default:** `true` |
+| `stripName`          | Removes all keys before the printed key. <br><br>**Example:** `a.b.c` will print `c`.<br> **Default:** `true` |
+| `title`              | Title to display at the top of the module. <br><br> **Default:** `Home Assistant` |
+| `url`                | The url of the Home Assistant api . <br><br> **Default:** `REQUIRED` |
+| `updateInterval`     | The time between updates (In milliseconds). <br><br> **Default:** `300000 (5 minutes)` |
 | `values`             | Specify specific values from the json feed to only show what you need (entity_id). |
 
 ## values option
 | Option               | Description |
 | -------------------- | ----------- |
-| `sensor`             | entity_id as of home-assistant. Please hav a look at teh states pages for the unique entity_id of your sensor |
-| `icons`             | an icons object for the on/off status of sensor. please see: [MaterialDesignIcons](https://materialdesignicons.com/) |
+| `sensor`             | `entity_id` from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor |
+| `icons`              | Icons object for the on/off status of sensor. see: [MaterialDesignIcons](https://materialdesignicons.com/) |
 
 ## icons option
 | Option               | Description |
 | -------------------- | ----------- |
-| `default`             | default icon of the sensor. In case there is no on/off status, like processor use. |
-| `state_on`             | on status icon of the sensor |
-| `state_off`             | off status icon of the sensor |
+| `default`            | Default icon of the sensor. In case there is no on/off status, like processor use. |
+| `state_on`           | On status icon of the sensor |
+| `state_off`          | Off status icon of the sensor |
 
 Here is an example of an entry in `config.js`
 ```
