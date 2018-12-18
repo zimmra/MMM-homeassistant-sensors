@@ -42,7 +42,10 @@ modules: [{
 		module: 'MMM-homeassistant-sensors',
 		position: 'top_left',
 		config: {
-			url: 'https://youehomeassistant:8123/api/states?api_password=secret',
+			host: "YOUR_HASS_HOST",
+			port: "8123",
+			https: false,
+			token: "YOUR_LONG_LIVED_HASS_TOKEN",
 			prettyName: false,
 			stripName: false,
 			values: [{
