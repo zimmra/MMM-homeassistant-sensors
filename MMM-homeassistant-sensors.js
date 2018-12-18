@@ -162,7 +162,7 @@ Module.register("MMM-homeassistant-sensors", {
 		}, nextLoad);
 	},
 	getStats: function () {
-		this.sendSocketNotification('GET_STATS', this.config.url);
+		this.sendSocketNotification('GET_STATS', this.config);
 	},
 	socketNotificationReceived: function (notification, payload) {
 		if (notification === "STATS_RESULT") {
