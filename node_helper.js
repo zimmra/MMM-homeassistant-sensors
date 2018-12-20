@@ -6,16 +6,31 @@ module.exports = NodeHelper.create({
     console.log('MMM-homeassistant-sensors helper started...');
   },
 
-  getStats: function (url) {
+  getStats: function (config) {
       var self = this;
+      var url = self.buildUrl(config);
 
-      request({ url: url, method: 'GET' }, function (error, response, body) {
+      request({ url: url, method: 'GET', headers: { 'Authorization' : 'Bearer ' + config.token } }, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             var result = JSON.parse(body);
             self.sendSocketNotification('STATS_RESULT', result);
           }
       });
 
+  },
+
+  buildUrl: function(config) {
+      var url = config.host;
+      if (config.port) {
+          url = url + ':' + config.port;
+      }
+
+      url = url + '/api/states';
+
+      if (config.https) {
+          return 'https://' + url;
+      }
+      return 'http://' + url;
   },
 
   //Subclass socketNotificationReceived received.
