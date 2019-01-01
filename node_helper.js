@@ -15,6 +15,7 @@ module.exports = NodeHelper.create({
           } else {
             console.error('MMM-homeassistant-sensors ERROR:', error);
             console.error('statusCode:', response && response.statusCode);
+            console.error("MMM-homeassistant-sensors - buildUrl:", url);
           }
       });
   },
@@ -26,7 +27,6 @@ module.exports = NodeHelper.create({
       url = url + '/api/states';
       if (config.https) { url = 'https://' + url; } 
       else { url = 'http://' + url; }
-      console.log("MMM-homeassistant-sensors - buildUrl:", url);
       return url;
   },
   //Subclass socketNotificationReceived received.
