@@ -19,7 +19,10 @@ It is very simple to set up this module, a sample configuration looks like this:
 | `prettyName`         | Pretty print the name of each JSON key (remove camelCase and underscores). <br><br> **Default:** `true` |
 | `stripName`          | Removes all keys before the printed key. <br><br>**Example:** `a.b.c` will print `c`.<br> **Default:** `true` |
 | `title`              | Title to display at the top of the module. <br><br> **Default:** `Home Assistant` |
-| `url`                | The url of the Home Assistant api . <br><br> **Default:** `REQUIRED` |
+| `host`               | The hostname or ip adress of the home assistant instance. <br><br> **Default:** `REQUIRED hassio.local` |
+| `port`               | port of homeassistant e.g. 443 for SSL. <br><br> **Default:** `8321` |
+| `https`              | is SSL enabled on home assistant? <br><br> **Default:** `REQUIRED false` |
+| `token`              | The long lived token. <br><br> **Default:** `REQUIRED` |
 | `updateInterval`     | The time between updates (In milliseconds). <br><br> **Default:** `300000 (5 minutes)` |
 | `values`             | Specify specific values from the json feed to only show what you need (entity_id). |
 

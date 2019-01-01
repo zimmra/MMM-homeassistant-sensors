@@ -6,7 +6,10 @@ Module.register("MMM-homeassistant-sensors", {
 		prettyName: true,
 		stripName: true,
 		title: 'Home Assistant',
-		url: '',
+		host: 'hassio.local',
+		port: '8321',
+		https: false, 
+		token: '',
 		updateInterval: 3000,
 		displaySymbol: true,
 		values: []
