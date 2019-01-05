@@ -10,8 +10,10 @@ Module.register("MMM-homeassistant-sensors", {
 		port: '8321',
 		https: false, 
 		token: '',
-		updateInterval: 3000,
+		apipassword: '',
+		updateInterval: 300000,
 		displaySymbol: true,
+		debuglogging: false,
 		values: []
 	},
 

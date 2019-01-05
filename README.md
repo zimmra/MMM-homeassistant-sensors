@@ -21,9 +21,12 @@ It is very simple to set up this module, a sample configuration looks like this:
 | `title`              | Title to display at the top of the module. <br><br> **Default:** `Home Assistant` |
 | `host`               | The hostname or ip adress of the home assistant instance. <br><br> **Default:** `REQUIRED hassio.local` |
 | `port`               | port of homeassistant e.g. 443 for SSL. <br><br> **Default:** `8321` |
-| `https`              | is SSL enabled on home assistant? <br><br> **Default:** `REQUIRED false` |
+| `https`              | is SSL enabled on home assistant (true/false) <br><br> **Default:** `REQUIRED false` |
 | `token`              | The long lived token. <br><br> **Default:** `REQUIRED` |
+| `apipassword`        | Deprecated API password. <br><br> **Default:** `` |
 | `updateInterval`     | The time between updates (In milliseconds). <br><br> **Default:** `300000 (5 minutes)` |
+| `selfsigned`         | allows self signed certificates/ less secure (true/false). <br><br> **Default:** `false` |
+| `debuglogging`       | Enable logging into /home/pi/.pm2/logs/mm-error.log (true/false). <br><br> **Default:** `false` |
 | `values`             | Specify specific values from the json feed to only show what you need (entity_id). |
 
 ## values option
@@ -51,6 +54,7 @@ modules: [{
 			token: "YOUR_LONG_LIVED_HASS_TOKEN",
 			prettyName: false,
 			stripName: false,
+			debuglogging; false,
 			values: [{
 					sensor: "sensor.processor_use",
 					icons: [{
