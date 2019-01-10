@@ -41,6 +41,8 @@ It is very simple to set up this module, a sample configuration looks like this:
 | `default`            | Default icon of the sensor. In case there is no on/off status, like processor use. |
 | `state_on`           | On status icon of the sensor |
 | `state_off`          | Off status icon of the sensor |
+| `state_open`         | Open status icon of the sensor |
+| `state_closed`       | Closed status icon of the sensor |
 
 Here is an example of an entry in `config.js`
 ```
