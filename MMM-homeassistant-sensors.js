@@ -131,6 +131,14 @@ Module.register("MMM-homeassistant-sensors", {
 					iconsinline = document.createElement("i");
 					iconsinline.className = "mdi mdi-" + icons.state_off;
 					newCell.appendChild(iconsinline);
+				} else if (value == "open" && typeof icons.state_open === "string") {
+					iconsinline = document.createElement("i");
+					iconsinline.className = "mdi mdi-" + icons.state_open;
+					newCell.appendChild(iconsinline);
+				} else if (value == "closed" && typeof icons.state_closed === "string") {
+					iconsinline = document.createElement("i");
+					iconsinline.className = "mdi mdi-" + icons.state_closed;
+					newCell.appendChild(iconsinline);
 				} else {
 					if (typeof icons.default === "string") {
 						iconsinline = document.createElement("i");
