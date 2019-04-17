@@ -56,7 +56,7 @@ modules: [{
 			token: "YOUR_LONG_LIVED_HASS_TOKEN",
 			prettyName: false,
 			stripName: false,
-			debuglogging; false,
+			debuglogging: false,
 			values: [{
 					sensor: "sensor.processor_use",
 					icons: [{
