@@ -16,136 +16,140 @@ It is very simple to set up this module, a sample configuration looks like this:
 
 | Option               | Deafult | Description |
 | -------------------- | ------- | ----------- |
-| `prettyName`         | `true` | Pretty print the name of each JSON key (remove camelCase and underscores). <br>|
-| `stripName`          | `true` | Removes all keys before the printed key. <br><br>**Example:** `a.b.c` will print `c`. <br>|
+| `prettyName`         | `true` | Pretty print the name of each JSON key (remove camelCase and underscores).|
+| `stripName`          | `true` | Removes all keys before the printed key. <br><br>**Example:** `a.b.c` will print `c`.|
 | `title`              | Home Assistant | Title to display at the top of the module. <br>|
-| `host`               | `REQUIRED hassio.local` | The hostname or ip adress of the home assistant instance. <br>|
-| `port`               | `8321` | Port of homeassistant e.g. 443 for SSL. <br>|
-| `https`              | `REQUIRED false` | Is SSL enabled on home assistant (true/false) <br>|
-| `token`              | `REQUIRED` | The long lived token. <br>|
-| `updateInterval`     | `300000` | The time between updates (In milliseconds). (300000 = 5 minutes) <br>|
-| `selfsigned`         | `false` | Allows self signed certificates/ less secure (true/false). <br>|
-| `debuglogging`       | `false` | Enable logging into /home/pi/.pm2/logs/mm-error.log (true/false). <br>|
-| `values`             |  | Specify specific values from the json feed to only show what you need (entity_id). <br><br> Check the options! <br>|
+| `host`               | `REQUIRED hassio.local` | The hostname or ip adress of the home assistant instance.|
+| `port`               | `8321` | Port of homeassistant e.g. 443 for SSL.|
+| `https`              | `REQUIRED false` | Is SSL enabled on home assistant (true/false)|
+| `token`              | `REQUIRED` | The long lived token.|
+| `updateInterval`     | `300000` | The time between updates (In milliseconds) (300000 = 5 minutes).|
+| `selfsigned`         | `false` | Allows self signed certificates/ less secure (true/false).|
+| `debuglogging`       | `false` | Enable logging into /home/pi/.pm2/logs/mm-error.log (true/false).|
+| `values`             | `[array{}]` | Specify specific values from the json feed to only show what you need (entity_id). <br><br> Check the options!|
 
 ## Sensor options
-| Option               | default |Description |
-| -------------------- | ------- |----------- |
-| `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor <br>|
-| `icons`              |  | Icons object for the on/off status of sensor. see: [MaterialDesignIcons](https://materialdesignicons.com/) <br>|
+| Option               | Type | Description |
+| -------------------- | ---- | ----------- |
+| `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor.|
+| `name`               | `string` | You can specify a name that will be displayed instead of the one from HA.
+| `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.
+| `icons`              | `[array{}]` | Define specific icons for spesific values (see example below). Icons object for the on/off status of sensor. see: [MaterialDesignIcons](https://materialdesignicons.com/)|
+| `replace`            | `[array{}]` | Define spesific values that will be owerriden by these specified values.|
 
 ## Sensor icon options
-| Option               | Description |
-| -------------------- | ----------- |
-| `value`              | You can define a specific icon for a specific value. <br>|
-| `default`            | The defaukt icon for the sensor (if nothing else is specified). <br>|
+| value                | icon | Description |
+| -------------------- | ---- | ----------- |
+| `value`              | `icon-name` | You can define a specific icon for a specific value.|
+| `default`            | `icon-name` | The default icon for the sensor (if nothing else is specified).|
 
 ## Sensor value options
-| Option               | Description |
-| -------------------- | ----------- |
-| `value`              | You can define a specific icon for a specific value. <br>|
-| `default`            | The defaukt icon for the sensor (if nothing else is specified). <br>|
+| Value                | New Value | Description |
+| -------------------- | --------- | ----------- |
+| `value`              | `your new value` | You can define a specific value the will be replaced with a another value.|
 
 
 Here is an example of an entry in `config.js`
 ```
-		{
-			module: 'MMM-homeassistant-sensors',
-			position: 'top_left',
-			config: {
-				host: "IP TO HOME ASSISTANT",
-				port: "8123",
-				https: false,
-				token: "YOUR OWN",
-				title: 'Husinformation',
-				values: [
-					{
-						sensor: "sensor.greenhouse_temp_and_humid_01_temperature",
-						name: "Temp i växsthuset",
-						defunit: " grader.",
-						icons: [{
-								"default": "thermometer",
-							}
-						],
-					},
-					{
-						sensor: "sensor.greenhouse_temp_and_humid_01_humidity",
-						name: "Fukt i växthuset",
-						icons: [{
-								"default": "water-percent",
-							}
-						]
-					},
-					{
-						sensor: "media_player.snilles_tv",
-						icons: [{
-								"default": "television-off",
-								"off": "television-off",
-								"on": "television"
-							}
-						],
-						replace: [{
-								"on": "På",
-								"off": "Av",
-								"unknown": "Av",
-							}
-						]
-					},
-					{
-						sensor: "binary_sensor.pet_cappuccino",
-						icons: [{
-								"off": "paw-off",
-								"on": "paw",
-							}
-						],
-						replace: [{
-								"on": "Inne",
-								"off": "Ute",
-							}
-						]
-					},
-					{
-						sensor: "binary_sensor.pet_kakan",
-						icons: [{
-								"off": "paw-off",
-								"on": "paw"
-							}
-						],
-						replace: [{
-								"on": "Inne",
-								"off": "Ute",
-							}
-						]
-					},
-					{
-						sensor: "binary_sensor.dishwasher",
-						icons: [{
-								"off": "dishwasher-off",
-								"on": "dishwasher"
-							}
-						],
-						replace: [{
-								"on": "Diskar",
-								"off": "Klar",
-							}
-						]
-					},
-					{
-						sensor: "binary_sensor.espresso_machine",
-						icons: [{
-								"off": "coffee-off",
-								"on": "coffee"
-							}
-						],
-						replace: [{
-								"on": "På",
-								"off": "Av",
-							}
-						]
+{
+	module: 'MMM-homeassistant-sensors',
+	position: 'top_left',
+	config: {
+		host: "IP TO HOME ASSISTANT",
+		port: "8123",
+		https: false,
+		token: "YOUR OWN",
+		title: 'Husinformation',
+		values: [
+			{
+				sensor: "sensor.greenhouse_temp_and_humid_01_temperature", # The sensor from HA.
+				name: "Temp i växsthuset",                                 # New name on the Mirror
+				defunit: " grader.",                                       # New Unit as well.
+				icons: [{
+						"default": "thermometer"                   # Set the default Icon to use.
+					}
+				],
+			},
+			{
+				sensor: "sensor.greenhouse_temp_and_humid_01_humidity",
+				name: "Fukt i växthuset",
+				icons: [{
+						"default": "water-percent"
+					}
+				]
+			},
+			{
+				sensor: "media_player.snilles_tv",
+				icons: [{
+						"default": "television-off",               # Set a default Icon.
+						"off": "television-off",                   # Set a specific Icon for value "off".
+						"on": "television"                         # Set a specifiv Icon for value "on".
+					}
+				],
+				replace: [{
+						"on": "På",                                # Replace the value "on" from the sensor to "På".
+						"off": "Av",                               # Replace the value "off" from the sensor to "Av".
+						"unknown": "Av"                            # Replace the value "unknown" from the sensor to "Av".
+					}
+				]
+			},
+			{
+				sensor: "binary_sensor.pet_cappuccino",
+				icons: [{
+						"off": "paw-off",
+						"on": "paw"
+					}
+				],
+				replace: [{
+						"on": "Inne",
+						"off": "Ute"
+					}
+				]
+			},
+			{
+				sensor: "binary_sensor.pet_kakan",
+				icons: [{
+						"off": "paw-off",
+						"on": "paw"
+					}
+				],
+				replace: [{
+						"on": "Inne",
+						"off": "Ute"
+					}
+				]
+			},
+			{
+				sensor: "binary_sensor.dishwasher",
+				icons: [{
+						"off": "dishwasher-off",
+						"on": "dishwasher"
+					}
+				],
+				replace: [{
+						"on": "Diskar",
+						"off": "Klar",
+					}
+				]
+			},
+			{
+				sensor: "binary_sensor.espresso_machine",
+				icons: [{
+						"off": "coffee-off",
+						"on": "coffee"
+					}
+				],
+				replace: [{
+						"on": "På",
+						"off": "Av"
 					}
 				]
 			}
-		},```
+		]
+	}
+},
+```
+
 **Result** example:
 
 ![Alt text](.github/example01.png)
