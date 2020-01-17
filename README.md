@@ -35,16 +35,16 @@ It is very simple to set up this module, a sample configuration looks like this:
 | `icons`              |  | Icons object for the on/off status of sensor. see: [MaterialDesignIcons](https://materialdesignicons.com/) <br>|
 
 ## Sensor icon options
-| Option               || Description |
-| -------------------- || ----------- |
-| `value`              || You can define a specific icon for a specific value. <br>|
-| `default`            || The defaukt icon for the sensor (if nothing else is specified). <br>|
+| Option               | Description |
+| -------------------- | ----------- |
+| `value`              | You can define a specific icon for a specific value. <br>|
+| `default`            | The defaukt icon for the sensor (if nothing else is specified). <br>|
 
 ## Sensor value options
-| Option               || Description |
-| -------------------- || ----------- |
-| `value`              || You can define a specific icon for a specific value. <br>|
-| `default`            || The defaukt icon for the sensor (if nothing else is specified). <br>|
+| Option               | Description |
+| -------------------- | ----------- |
+| `value`              | You can define a specific icon for a specific value. <br>|
+| `default`            | The defaukt icon for the sensor (if nothing else is specified). <br>|
 
 
 Here is an example of an entry in `config.js`
