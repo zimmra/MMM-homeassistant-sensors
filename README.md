@@ -35,10 +35,10 @@ It is very simple to set up this module, a sample configuration looks like this:
 | `name`               | `string` | You can specify a name that will be displayed instead of the one from HA.
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.
 | `icons`              | `[array{}]` | Define specific icons for spesific values (see example below). You can use the icon objects from the: [MaterialDesignIcons](https://materialdesignicons.com/). If you downloaded and unpacked them.|
-| `replace`            | `[array{}]` | Define spesific values that will be owerriden by these specified values.|
+| `replace`            | `[array{}]` | Define specific values that will be owerriden by the specified values.|
 
 ## Sensor icon options
-| value                | icon | Description |
+| value                | Icon | Description |
 | -------------------- | ---- | ----------- |
 | `value`              | `icon-name` | You can define a specific icon for a specific value.|
 | `default`            | `icon-name` | The default icon for the sensor (if nothing else is specified).|
@@ -46,7 +46,7 @@ It is very simple to set up this module, a sample configuration looks like this:
 ## Sensor value options
 | Value                | New Value | Description |
 | -------------------- | --------- | ----------- |
-| `value`              | `your new value` | You can define a specific value the will be replaced with a another value.|
+| `value`              | `your new value` | You can define a specific value the will be replaced with this value.|
 
 
 Here is an example of an entry in `config.js`
@@ -156,6 +156,5 @@ Here is an example of an entry in `config.js`
 
 ## Special Thanks
 - [Michael Teeuw](https://github.com/MichMich) for creating the awesome [MagicMirror2](https://github.com/MichMich/MagicMirror/tree/develop) project that made this module possible.
-
 
 - [tkoeberl](https://github.com/tkoeberl) for creating the initial module that I used as guidance in creating this module.
