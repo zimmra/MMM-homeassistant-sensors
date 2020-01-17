@@ -47,19 +47,34 @@ Module.register("MMM-homeassistant-sensors", {
 			var values = this.config.values;
 			if (values.length > 0) {
 				for (var i = 0; i < values.length; i++) {
-					var icons = values[i].icons[0];
+					if (values[i].icons) {
+						var icons = values[i].icons[0];
+					} else {
+						var icons = "none";
+					}
+					if (values[i].replace) {
+						var replace = values[i].replace[0];
+					} else {
+						var replace = "none";
+					}
+					if (values[i].defunit) {
+						var defunit = values[i].defunit;
+					} else {
+						var defunit = "none";
+					}
 					var sensor = values[i].sensor;
+					var displayname = values[i].name;
 					var val = this.getValue(data, sensor);
 					var name = this.getName(data, sensor);
 					var unit = this.getUnit(data, sensor);
 					if (val) {
-						tableElement.appendChild(this.addValue(name, val, unit, icons));
+						tableElement.appendChild(this.addValue(name, val, unit, icons, replace, displayname, defunit));
 					}
 				}
 			} else {
 				for (var key in data) {
 					if (data.hasOwnProperty(key)) {
-						tableElement.appendChild(this.addValue(key, data[key], "", ""));
+						tableElement.appendChild(this.addValue(key, data[key], "", "", "", "", ""));
 					}
 				}
 			}
@@ -98,55 +113,66 @@ Module.register("MMM-homeassistant-sensors", {
 		}
 		return null;
 	},
-	addValue: function (name, value, unit, icons) {
+	addValue: function (name, value, unit, icons, replace, displayname, defunit) {
 		var newrow,
 		newText,
 		newCell;
+		var newValue;
 		newrow = document.createElement("tr");
-		if (this.config.stripName) {
-			var split = name.split(".");
-			name = split[split.length - 1];
+		if (displayname) {
+			name = displayname;
+		} else {
+			if (this.config.stripName) {
+				var split = name.split(".");
+				name = split[split.length - 1];
+			}
+			if (this.config.prettyName) {
+				name = name.replace(/([A-Z])/g, function ($1) {
+						return "_" + $1.toLowerCase();
+					});
+				name = name.split("_").join(" ");
+				name = name.replace(/\w\S*/g, function (txt) {
+						return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+					});
+			}
 		}
-		if (this.config.prettyName) {
-			name = name.replace(/([A-Z])/g, function ($1) {
-					return "_" + $1.toLowerCase();
-				});
-			name = name.split("_").join(" ");
-			name = name.replace(/\w\S*/g, function (txt) {
-					return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-				});
+		// Unit
+		if (defunit !== "none") {
+			console.log(defunit);
+			unit = defunit;
 		}
 		// icons
 		newCell = newrow.insertCell(0);
 		newCell.className = "align-left";
 		if (this.config.displaySymbol) {
 			if (typeof icons === "object") {
-				var iconsinline;
+				var iconsinline = "none";
 				//Change icons based on HA status
-				if (value == "on" && typeof icons.state_on === "string") {
-					iconsinline = document.createElement("i");
-					iconsinline.className = "mdi mdi-" + icons.state_on;
-					newCell.appendChild(iconsinline);
-				} else if (value == "off" && typeof icons.state_off === "string") {
-					iconsinline = document.createElement("i");
-					iconsinline.className = "mdi mdi-" + icons.state_off;
-					newCell.appendChild(iconsinline);
-				} else if (value == "open" && typeof icons.state_open === "string") {
-					iconsinline = document.createElement("i");
-					iconsinline.className = "mdi mdi-" + icons.state_open;
-					newCell.appendChild(iconsinline);
-				} else if (value == "closed" && typeof icons.state_closed === "string") {
-					iconsinline = document.createElement("i");
-					iconsinline.className = "mdi mdi-" + icons.state_closed;
-					newCell.appendChild(iconsinline);
-				} else {
-					if (typeof icons.default === "string") {
+				for (var key in icons) {
+					// Sets the icon defined in the config specified value will give specified icon.
+				    if (value === key) {
+						iconsinline = document.createElement("i");
+						iconsinline.className = "mdi mdi-" + icons[key];	
+						break;
+					} 
+					// If no icon is set by values, the default one will be used.
+					if (iconsinline === "none") {
 						iconsinline = document.createElement("i");
 						iconsinline.className = "mdi mdi-" + icons.default;
-						newCell.appendChild(iconsinline);
 					}
 				}
+				newCell.appendChild(iconsinline);
 			}
+		}
+		// Replace the "value" with something defined in config.
+		for (var key in replace) {
+			if (value === key) {
+				newValue = replace[key];
+				break;
+			} else {
+				newValue = value;
+			}
+			//console.log("sdsdf");
 		}
 		// Name
 		newCell = newrow.insertCell(1);
@@ -155,12 +181,12 @@ Module.register("MMM-homeassistant-sensors", {
 		// Value
 		newCell = newrow.insertCell(2);
 		newCell.className = "align-right"
-			newText = document.createTextNode(value);
+		newText = document.createTextNode(newValue);
 		newCell.appendChild(newText);
 		// Unit
 		newCell = newrow.insertCell(3);
 		newCell.className = "align-left"
-			newText = document.createTextNode(unit);
+		newText = document.createTextNode(unit);
 		newCell.appendChild(newText);
 		return newrow;
 	},
