@@ -3,8 +3,8 @@ This a module for the [MagicMirror](https://github.com/MichMich/MagicMirror/tree
 It can display information from [Home Assistant](https://home-assistant.io/) using the home assistant REST API.
 
 ## Installation
-Navigate into your MagicMirror's `modules` folder and clone this repository:  
-`cd ~/MagicMirror/modules && git clone https://github.com/leinich/MMM-homeassistant-sensors.git`
+Navigate into your MagicMirror's `modules` folder and clone this repository:
+`cd ~/MagicMirror/modules && git clone https://github.com/Snille/MMM-homeassistant-sensors`
 
 If you want to use icons for the sensors download the `MaterialDesignIcons` webfont from https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip and unzip the folder:  
 `cd ~/MagicMirror/modules/MMM-homeassistant-sensors && wget https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip && unzip master.zip`
@@ -34,7 +34,7 @@ It is very simple to set up this module, a sample configuration looks like this:
 | `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor.|
 | `name`               | `string` | You can specify a name that will be displayed instead of the one from HA.
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.
-| `icons`              | `[array{}]` | Define specific icons for spesific values (see example below). Icons object for the on/off status of sensor. see: [MaterialDesignIcons](https://materialdesignicons.com/)|
+| `icons`              | `[array{}]` | Define specific icons for spesific values (see example below). You can use the icon objects from the: [MaterialDesignIcons](https://materialdesignicons.com/). If you downloaded and unpacked them.|
 | `replace`            | `[array{}]` | Define spesific values that will be owerriden by these specified values.|
 
 ## Sensor icon options
@@ -156,4 +156,6 @@ Here is an example of an entry in `config.js`
 
 ## Special Thanks
 - [Michael Teeuw](https://github.com/MichMich) for creating the awesome [MagicMirror2](https://github.com/MichMich/MagicMirror/tree/develop) project that made this module possible.
+
+
 - [tkoeberl](https://github.com/tkoeberl) for creating the initial module that I used as guidance in creating this module.
