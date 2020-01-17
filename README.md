@@ -31,20 +31,20 @@ It is very simple to set up this module, a sample configuration looks like this:
 ## Sensor options
 | Option               | default |Description |
 | -------------------- | ------- |----------- |
-| `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor |
-| `icons`              |  | Icons object for the on/off status of sensor. see: [MaterialDesignIcons](https://materialdesignicons.com/) |
+| `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor <br>|
+| `icons`              |  | Icons object for the on/off status of sensor. see: [MaterialDesignIcons](https://materialdesignicons.com/) <br>|
 
 ## Sensor icon options
 | Option               || Description |
 | -------------------- || ----------- |
-| `value`              || You can define a specific icon for a specific value. |
-| `default`            || The defaukt icon for the sensor (if nothing else is specified). |
+| `value`              || You can define a specific icon for a specific value. <br>|
+| `default`            || The defaukt icon for the sensor (if nothing else is specified). <br>|
 
 ## Sensor value options
 | Option               || Description |
 | -------------------- || ----------- |
-| `value`              || You can define a specific icon for a specific value. |
-| `default`            || The defaukt icon for the sensor (if nothing else is specified). |
+| `value`              || You can define a specific icon for a specific value. <br>|
+| `default`            || The defaukt icon for the sensor (if nothing else is specified). <br>|
 
 
 Here is an example of an entry in `config.js`
