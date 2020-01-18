@@ -15,8 +15,22 @@
 }
 
 .ha-icon {
-  text-align: left;
+  text-align: right;
   font-size: 20px;
+}
+
+.ha-img {
+  text-align: right;
+  height: 20px;
+  width: 20px;
+}
+
+.ha-date {
+  text-align: left;
+}
+
+.ha-time {
+  text-align: left;
 }
 
 .ha-name {
