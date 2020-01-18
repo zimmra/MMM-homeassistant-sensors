@@ -18,7 +18,7 @@ Module.register("MMM-homeassistant-sensors", {
 	},
 
 	getStyles: function () {
-		return ["modules/MMM-homeassistant-sensors/MaterialDesign-Webfont-master/css/materialdesignicons.min.css"];
+		return ["modules/MMM-homeassistant-sensors/MaterialDesign-Webfont-master/css/materialdesignicons.min.css", "MMM-homeassistant-sensors.css"];
 	},
 
 	start: function () {
@@ -35,7 +35,7 @@ Module.register("MMM-homeassistant-sensors", {
 	},
 	getDom: function () {
 		var wrapper = document.createElement("ticker");
-		wrapper.className = 'dimmed small';
+		wrapper.className = 'ha-sensors';
 		var data = this.result;
 		var statElement = document.createElement("header");
 		var title = this.config.title;
@@ -152,13 +152,13 @@ Module.register("MMM-homeassistant-sensors", {
 					// Sets the icon defined in the config specified value will give specified icon.
 				    if (value === key) {
 						iconsinline = document.createElement("i");
-						iconsinline.className = "mdi mdi-" + icons[key];	
+						iconsinline.className = "ha-icon mdi mdi-" + icons[key];	
 						break;
 					} 
 					// If no icon is set by values, the default one will be used.
 					if (iconsinline === "none") {
 						iconsinline = document.createElement("i");
-						iconsinline.className = "mdi mdi-" + icons.default;
+						iconsinline.className = "ha-icon mdi mdi-" + icons.default;
 					}
 				}
 				newCell.appendChild(iconsinline);
@@ -176,16 +176,17 @@ Module.register("MMM-homeassistant-sensors", {
 		}
 		// Name
 		newCell = newrow.insertCell(1);
+		newCell.className = "ha-name";
 		newText = document.createTextNode(name);
 		newCell.appendChild(newText);
 		// Value
 		newCell = newrow.insertCell(2);
-		newCell.className = "align-right"
+		newCell.className = "ha-value";
 		newText = document.createTextNode(newValue);
 		newCell.appendChild(newText);
 		// Unit
 		newCell = newrow.insertCell(3);
-		newCell.className = "align-left"
+		newCell.className = "ha-unit";
 		newText = document.createTextNode(unit);
 		newCell.appendChild(newText);
 		return newrow;

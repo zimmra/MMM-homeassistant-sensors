@@ -1,0 +1,31 @@
+/*****************************************************
+ * Magic Mirror 2                                    *
+ * Custom CSS for MMM-homeassistant-sensors          *
+ *                                                   *
+ * By Erik Pettersson                                *
+ * MIT Licensed.                                     *
+ *                                                   *
+ *****************************************************/
+
+.ha-sensors {
+    font-size: 15px;
+    line-height: 15px;
+	color: #fff
+}
+
+.ha-icon {
+  text-align: left;
+  font-size: 20px;
+}
+
+.ha-name {
+  text-align: left;
+}
+
+.ha-value {
+  text-align: right;
+}
+
+.ha-unit {
+  text-align: left;
+}
