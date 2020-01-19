@@ -76,6 +76,11 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `icons`              | `[array{}]` | Define specific icons for spesific values (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
 | `replace`            | `[array{}]` | Define specific values that will be owerriden by the specified values.|
 
+### Template options
+- Use the %v% in the name and unit strings to the the "value" string from the sensor.
+- Use the %d% in the name and unit strings to the the "last update date" string from the sensor there.
+- Use the %t% in the name and unit strings to the the "last update time" string from the sensor there.
+
 ## Sensor icon options
 | value                | Icon | Description |
 | -------------------- | ---- | ----------- |
@@ -377,5 +382,4 @@ The configuration can be very simpel, from just displaying a simple value from a
 
 ## Special Thanks
 - [Michael Teeuw](https://github.com/MichMich) for creating the awesome [MagicMirror2](https://github.com/MichMich/MagicMirror/tree/develop) project that made this module possible.
-
 - [tkoeberl](https://github.com/tkoeberl) for creating the initial module that I used as guidance in creating this module.
