@@ -181,6 +181,56 @@ Added the following to my `custom.css` file.
 ### Result 
 ![Simple+css](.github/screen03-simple+css.png)
 
+### Simple with Icons
+- Icon changes depending on status (on/off).
+- Values are replaced (on/off) to (Working/Idle).
+```
+{
+	module: 'MMM-homeassistant-sensors',
+	position: 'top_left',
+	config: {
+		host: "IP TO HOME ASSISTANT",
+		port: "8123",
+		https: false,
+		token: "YOUR OWN",
+		title: 'Husinformation',
+		values: [
+			{
+				sensor: "binary_sensor.washing_machine",
+				name: "Washing Machine",
+				icons: [{
+						"off": "washing-machine-off",
+						"on": "washing-machine"
+					}
+				],
+				replace: [{
+						"on": "Working",
+						"off": "Idle"
+					}
+				]
+			},
+			{
+				sensor: "binary_sensor.dishwasher",
+				name: "Dishwasher",
+				icons: [{
+						"off": "dishwasher-off",
+						"on": "dishwasher"
+					}
+				],
+				replace: [{
+						"on": "Working",
+						"off": "Idle"
+					}
+				]
+			},
+		]
+	}
+},
+```
+
+### Result 
+![Simple+icons](.github/screen03-simple+icons.png)
+
 
 ### Here is the advanced configuration
 
