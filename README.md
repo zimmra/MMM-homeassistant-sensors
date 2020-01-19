@@ -229,8 +229,7 @@ Added the following to my `custom.css` file.
 ```
 
 ### Result 
-![Simple+icons](.github/screen03-simple+icons.png)
-
+![Simple+icons](.github/screen04-simple+icons.png)
 
 ### Here is the advanced configuration
 
