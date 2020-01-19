@@ -92,6 +92,95 @@ The configuration can be very simpel, from just displaying a simple value from a
 | -------------------- | --------- | ----------- |
 | `value`              | `your new value` | You can define a specific value the will be replaced with this value.|
 
+### Simple configuration
+```
+{
+	module: 'MMM-homeassistant-sensors',
+	position: 'top_left',
+	config: {
+		host: "IP TO HOME ASSISTANT",
+		port: "8123",
+		https: false,
+		token: "YOUR OWN",
+		title: 'Husinformation',
+		values: [
+			{
+				sensor: "sensor.vind_temperature",
+			},
+			{
+				sensor: "sensor.vind_humidity",
+			},
+		]
+	}
+},
+```
+
+### Result 
+![Simple](.github/screen02-simple.png)
+
+### Picture configuration for sensors
+- Picture changes depending on status (on/off).
+- Values are replaced (on/off) to (in/out).
+- Adding values and time to the "names" using the "templates" %v% and %t%.
+- Hiding the value from the "value" collumn.
+```
+{
+	module: 'MMM-homeassistant-sensors',
+	position: 'top_left',
+	config: {
+		host: "IP TO HOME ASSISTANT",
+		port: "8123",
+		https: false,
+		token: "YOUR OWN",
+		title: 'Husinformation',
+		values: [
+			{
+				sensor: "binary_sensor.pet_cappuccino",
+				name: "Cappuccino went %v% %t%",
+				displayvalue: false,
+				icons: [{
+						"off": "http://10.0.0.30/img/magicmirror/users/Cappuccino-Out-60x60.png",
+						"on": "http://10.0.0.30/img/magicmirror/users/Cappuccino-In-60x60.png"
+					}
+				],
+				replace: [{
+						"on": "in",
+						"off": "out"
+					}
+				]
+			},
+			{
+				sensor: "binary_sensor.pet_kakan",
+				name: "Kakan went %v% %t%",
+				displayvalue: false,
+				icons: [{
+						"off": "http://10.0.0.30/img/magicmirror/users/Kakan-Out-60x60.png",
+						"on": "http://10.0.0.30/img/magicmirror/users/Kakan-In-60x60.png"
+					}
+				],
+				replace: [{
+						"on": "in",
+						"off": "out"
+					}
+				]
+			},
+		]
+	}
+},
+```
+
+### CSS Changes
+Added the following to my `custom.css` file.
+```
+.ha-img {
+  height: 60px;
+  width: 60px;
+}
+```
+
+### Result 
+![Simple+css](.github/screen03-simple+css.png)
+
 
 ### Here is the advanced configuration
 
