@@ -1,19 +1,55 @@
 # MMM-homeassistant-sensors
-This a module for the [MagicMirror](https://github.com/MichMich/MagicMirror/tree/develop). 
-It can display information from [Home Assistant](https://home-assistant.io/) using the home assistant REST API.
 
-## Installation
-Navigate into your MagicMirror's `modules` folder and clone this repository:
-`cd ~/MagicMirror/modules && git clone https://github.com/Snille/MMM-homeassistant-sensors`
+This a module for the [MagicMirror²](https://magicmirror.builders/). 
 
-If you want to use icons for the sensors download the `MaterialDesignIcons` webfont from https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip and unzip the folder:  
-`cd ~/MagicMirror/modules/MMM-homeassistant-sensors && wget https://github.com/Templarian/MaterialDesign-Webfont/archive/master.zip && unzip master.zip`
+This module can display information from [Home Assistant](https://home-assistant.io/) using the home assistant REST API.
+
+### Screen shots
+
+[Advanced configuration](#Here-is-the-advanced-configuration).
+
+Using many of the features:
+
+- Adding the "value" to the name.
+- Adding time to the name column.
+- Hiding the unit it from the "unit" collumn.
+- Hiding the value in from the "value" collumn.
+- Using "pictures" from the entity.
+- Using different "pictures" for different values.
+- Using different "icons" for different values from the Material Design Font.
+- Replacing "values" with defined values.
+- Setting a "default" icon from the Material Design Font.
+
+![Advanced](.github/screen01-advanced.png)
+
+
+### Installation
+
+In your terminal, go to your MagicMirror's Module folder:
+````
+cd ~/MagicMirror/modules
+````
+
+Clone this repository:
+````
+git clone https://github.com/Snille/MMM-homeassistant-sensors
+````
+
+Enter the folder:
+````
+cd MMM-homeassistant-sensors
+````
+
+Install Node-Modules (The [MaterialDesignIcons](https://materialdesignicons.com/) webfont icon names can be used.).
+````
+npm install
+````
+
 
 ## Configuration
-It is very simple to set up this module, a sample configuration looks like this:
+The configuration can be very simpel, from just displaying a simple value from a senor, to parsing the sensorvalue and changeing it to different pictures depending on the value. It's all up to you.
 
 ## Configuration Options
-
 | Option               | Deafult | Description |
 | -------------------- | ------- | ----------- |
 | `prettyName`         | `true` | Pretty print the name of each JSON key (remove camelCase and underscores).|
@@ -23,8 +59,11 @@ It is very simple to set up this module, a sample configuration looks like this:
 | `port`               | `8321` | Port of homeassistant e.g. 443 for SSL.|
 | `https`              | `REQUIRED false` | Is SSL enabled on home assistant (true/false)|
 | `token`              | `REQUIRED` | The long lived token.|
-| `updateInterval`     | `300000` | The time between updates (In milliseconds) (300000 = 5 minutes).|
-| `selfsigned`         | `false` | Allows self signed certificates/ less secure (true/false).|
+| `fade`               | `100` | When updating the values, this is the time (in milliswconds) the "table" fades out and in again.|
+| `updateInterval`     | `300000` | The time between updates (in milliseconds) (300000 = 5 minutes).|
+| `displaySymbol`      | `true` | If you don't want either "icons" nor "pictures" in your list, set it to false.|
+| `displaydates`       | `false` | If you want to show dates for last update by default. This can be turned off or on for each sensor as well.|
+| `displaytimes`       | `false` | If you want to show times for last update by default. This can be turned off or on for each sensor as well.|
 | `debuglogging`       | `false` | Enable logging into /home/pi/.pm2/logs/mm-error.log (true/false).|
 | `values`             | `[array{}]` | Specify specific values from the json feed to only show what you need (entity_id). <br><br> Check the options!|
 
@@ -34,13 +73,13 @@ It is very simple to set up this module, a sample configuration looks like this:
 | `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor.|
 | `name`               | `string` | You can specify a name that will be displayed instead of the one from HA.
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.
-| `icons`              | `[array{}]` | Define specific icons for spesific values (see example below). You can use the icon objects from the: [MaterialDesignIcons](https://materialdesignicons.com/). If you downloaded and unpacked them.|
+| `icons`              | `[array{}]` | Define specific icons for spesific values (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
 | `replace`            | `[array{}]` | Define specific values that will be owerriden by the specified values.|
 
 ## Sensor icon options
 | value                | Icon | Description |
 | -------------------- | ---- | ----------- |
-| `value`              | `icon-name` | You can define a specific icon for a specific value.|
+| `value`              | `icon-name` | You can define a specific [MaterialDesignIcons](https://materialdesignicons.com/) icon or the URL to a picture for a specific value.|
 | `default`            | `icon-name` | The default icon for the sensor (if nothing else is specified).|
 
 ## Sensor value options
@@ -49,7 +88,8 @@ It is very simple to set up this module, a sample configuration looks like this:
 | `value`              | `your new value` | You can define a specific value the will be replaced with this value.|
 
 
-Here is an example of an entry in `config.js`
+### Here is the advanced configuration
+
 ```
 {
 	module: 'MMM-homeassistant-sensors',
@@ -62,17 +102,78 @@ Here is an example of an entry in `config.js`
 		title: 'Husinformation',
 		values: [
 			{
-				sensor: "sensor.greenhouse_temp_and_humid_01_temperature", # The sensor from HA.
-				name: "Temp i växsthuset",                                 # New name on the Mirror
-				defunit: " grader.",                                       # New Unit as well.
-				icons: [{
-						"default": "thermometer"                   # Set the default Icon to use.
+				sensor: "device_tracker.360_kidswatch_xplora4",
+				name: "Louise är %v%",
+				displayvalue: false,
+				replace: [{
+						"home": "hemma",
+						"not_home": "ute",
 					}
-				],
+				]
 			},
 			{
-				sensor: "sensor.greenhouse_temp_and_humid_01_humidity",
-				name: "Fukt i växthuset",
+				sensor: "device_tracker.google_maps_109299643857913851232",
+				name: "Camilla är %v%",
+				displayvalue: false,
+				replace: [{
+						"home": "hemma",
+						"not_home": "ute",
+					}
+				]
+			},
+			{
+				sensor: "device_tracker.google_maps_105082325528346759172",
+				name: "Erik är %v%",
+				displayvalue: false,
+				replace: [{
+						"home": "hemma",
+						"not_home": "ute",
+					}
+				]
+			},
+			{
+				sensor: "sensor.vind_temperature",
+				name: "Temp på vinden %t%",
+				icons: [{
+						"default": "thermometer"
+					}
+				]
+			},
+			{
+				sensor: "sensor.vind_humidity",
+				name: "Fukt på vinden %t%",
+				icons: [{
+						"default": "water-percent"
+					}
+				]
+			},
+			{
+				sensor: "sensor.vardagsrum_temperature",
+				name: "Temp i Vardagsrummet %t%",
+				icons: [{
+						"default": "thermometer"
+					}
+				]
+			},
+			{
+				sensor: "sensor.vardagsrum_humidity",
+				name: "Fukt i Vardagsrummet %t%",
+				icons: [{
+						"default": "water-percent"
+					}
+				]
+			},
+			{
+				sensor: "sensor.krypgrund_temperature",
+				name: "Temp i Krypgrunden %t%",
+				icons: [{
+						"default": "thermometer"
+					}
+				]
+			},
+			{
+				sensor: "sensor.krypgrund_humidity",
+				name: "Fukt i Krypgrunden %t%",
 				icons: [{
 						"default": "water-percent"
 					}
@@ -80,55 +181,179 @@ Here is an example of an entry in `config.js`
 			},
 			{
 				sensor: "media_player.snilles_tv",
+				name: "Just nu är TV:n",
 				icons: [{
-						"default": "television-off",               # Set a default Icon.
-						"off": "television-off",                   # Set a specific Icon for value "off".
-						"on": "television"                         # Set a specifiv Icon for value "on".
+						"default": "television-off",
+						"off": "television-off",
+						"on": "television"
 					}
 				],
 				replace: [{
-						"on": "På",                                # Replace the value "on" from the sensor to "På".
-						"off": "Av",                               # Replace the value "off" from the sensor to "Av".
-						"unknown": "Av"                            # Replace the value "unknown" from the sensor to "Av".
+						"on": "På",
+						"off": "Av",
+						"unknown": "Av"
 					}
 				]
 			},
 			{
+				sensor: "sensor.tv_on_today",
+				name: "Timmar TV:n varit på idag",
+				defunit: " ",
+				},
+			{
 				sensor: "binary_sensor.pet_cappuccino",
+				name: "Cappuccino gick %v% %t%",
+				displayvalue: false,
 				icons: [{
-						"off": "paw-off",
-						"on": "paw"
+						"off": "http://10.0.0.30/img/magicmirror/users/Cappuccino-Out-60x60.png",
+						"on": "http://10.0.0.30/img/magicmirror/users/Cappuccino-In-60x60.png"
 					}
 				],
 				replace: [{
-						"on": "Inne",
-						"off": "Ute"
+						"on": "in",
+						"off": "ut"
+					}
+				]
+			},
+			{
+				sensor: "sensor.cappuccinos_outside_time_today",
+				name: "Timmar ute idag:",
+				defunit: " ",
+				replace: [{
+						"unknown": "0",
+					}
+				]
+			},
+			{
+				sensor: "sensor.cappuccinos_trips_outside_today",
+				name: "Antal gånger ute idag:",
+				defunit: " ",
+				replace: [{
+						"unknown": "0",
+					}
+				]
+			},
+			{
+				sensor: "sensor.cappuccino_outside_yesterday",
+				name: "Timmar ute igår:",
+				defunit: " ",
+				replace: [{
+						"unknown": "0",
+					}
+				]
+			},
+			{
+				sensor: "sensor.cappuccinos_trips_outside_yesterday",
+				name: "Antal gånger ute igår:",
+				defunit: " ",
+				replace: [{
+						"unknown": "0",
 					}
 				]
 			},
 			{
 				sensor: "binary_sensor.pet_kakan",
+				name: "Kakan gick %v% %t%",
+				displayvalue: false,
 				icons: [{
-						"off": "paw-off",
-						"on": "paw"
+						"off": "http://10.0.0.30/img/magicmirror/users/Kakan-Out-60x60.png",
+						"on": "http://10.0.0.30/img/magicmirror/users/Kakan-In-60x60.png"
 					}
 				],
 				replace: [{
-						"on": "Inne",
-						"off": "Ute"
+						"on": "in",
+						"off": "ut"
+					}
+				]
+			},
+			{
+				sensor: "sensor.kakans_outside_time_today",
+				name: "Timmar ute idag:",
+				defunit: " ",
+				replace: [{
+						"unknown": "0",
+					}
+				]
+			},
+			{
+				sensor: "sensor.kakans_trips_outside_today",
+				name: "Antal gånger ute idag:",
+				defunit: " ",
+				replace: [{
+						"unknown": "0",
+					}
+				]
+			},
+			{
+				sensor: "sensor.kakan_outside_yesterday",
+				name: "Timmar ute igår:",
+				defunit: " ",
+				replace: [{
+						"unknown": "0",
+					}
+				]
+			},
+			{
+				sensor: "sensor.kakans_trips_outside_yesterday",
+				name: "Antal gånger ute igår:",
+				defunit: " ",
+				replace: [{
+						"unknown": "0",
+					}
+				]
+			},
+			{
+				sensor: "binary_sensor.washing_machine",
+				name: "Tvättmaskinen",
+				icons: [{
+						"off": "washing-machine-off",
+						"on": "washing-machine"
+					}
+				],
+				replace: [{
+						"on": "På",
+						"off": "Av"
+					}
+				]
+			},
+			{
+				sensor: "binary_sensor.drying_cabinet",
+				name: "Torkskåpet",
+				icons: [{
+						"off": "tumble-dryer-off",
+						"on": "tumble-dryer"
+					}
+				],
+				replace: [{
+						"on": "På",
+						"off": "Av"
 					}
 				]
 			},
 			{
 				sensor: "binary_sensor.dishwasher",
+				name: "Diskmaskinen",
 				icons: [{
 						"off": "dishwasher-off",
 						"on": "dishwasher"
 					}
 				],
 				replace: [{
-						"on": "Diskar",
-						"off": "Klar",
+						"on": "På",
+						"off": "Av"
+					}
+				]
+			},
+			{
+				sensor: "binary_sensor.coffee_maker",
+				icons: [{
+						"on": "kettle",
+						"off": "kettle-off"
+					}
+				],
+				replace: [{
+						"on": "På",
+						"off": "Av"
 					}
 				]
 			},
@@ -149,10 +374,6 @@ Here is an example of an entry in `config.js`
 	}
 },
 ```
-
-**Result** example:
-
-![Alt text](.github/example01.png)
 
 ## Special Thanks
 - [Michael Teeuw](https://github.com/MichMich) for creating the awesome [MagicMirror2](https://github.com/MichMich/MagicMirror/tree/develop) project that made this module possible.
