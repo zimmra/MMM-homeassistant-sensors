@@ -1,0 +1,17 @@
+{
+  "name": "MMM-homeassistant-sensors",
+  "version": "2.1.0",
+  "description": "Pull Home Assistant Sensor information to the Magic Mirror",
+  "keywords": [
+    "magic mirror",
+    "smart mirror",
+    "Home Assistant",
+	"HA",
+    "module"
+  ],
+  "author": "Snille",
+  "license": "MIT",
+  "dependencies": {
+    "@mdi/font": "latest"
+  }
+}

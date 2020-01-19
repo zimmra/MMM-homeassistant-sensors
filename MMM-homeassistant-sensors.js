@@ -11,6 +11,7 @@ Module.register("MMM-homeassistant-sensors", {
 		https: false, 
 		token: '',
 		apipassword: '',
+		fade: 100,
 		updateInterval: 300000,
 		displaySymbol: true,
 		displaydates: false,
@@ -108,21 +109,24 @@ Module.register("MMM-homeassistant-sensors", {
 					}
 
 					// Pulling all entity values.
+					// The Sensor
 					var sensor = values[i].sensor;
-					var displayname = values[i].name;
-					var val = this.getValue(data, sensor);
-					var lastupd = this.getLastupd(data, sensor);
-					var picture = this.getPicture(data, sensor);
+					// Name of the Sensor
 					var name = this.getName(data, sensor);
-					var unit = this.getUnit(data, sensor);
+					// Value of the Sensor
+					var val = this.getValue(data, sensor);
+
+					// Make the data array.
+					var sensordata = [val, this.getUnit(data, sensor), icons, replace, values[i].name, defunit, showdate, showtime, this.getLastupd(data, sensor), this.getPicture(data, sensor), values[i].displayvalue];
+					// For debugging
+					//console.log(sensordata);
 					if (val) {
-						tableElement.appendChild(this.addValue(name, val, unit, icons, replace, displayname, defunit, showdate, showtime, lastupd, picture, this.config.host, this.config.port, this.config.https));
-					}
+						tableElement.appendChild(this.addValue(name, sensordata));					}
 				}
 			} else {
 				for (var key in data) {
 					if (data.hasOwnProperty(key)) {
-						tableElement.appendChild(this.addValue(key, data[key], "", "", "", "", "", "", "", "", "", "", "", ""));
+						tableElement.appendChild(this.addValue(key, data[key]));
 					}
 				}
 			}
@@ -188,31 +192,38 @@ Module.register("MMM-homeassistant-sensors", {
 		return null;
 	},
 	
-	addValue: function (name, value, unit, icons, replace, displayname, defunit, showdate, showtime, lastupd, picture, host, port, https) {
+	addValue: function (name, sensordata) {
+		// The array looks like this.
+		//sensordata = [0]val, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue
 		var newrow,
 		newText,
 		newCell;
 		var newValue;
 		var datedata;
 		var timedata;
+		var unit;
+		var picture;
 		newrow = document.createElement("tr");
 
 		// Split up the time and date.
-		var datestring = lastupd.split("T");
+		var datestring = sensordata[8].split("T");
 		datedata = datestring[0];
 		var timestring = datestring[1].split(".");
 		timedata = timestring[0];
 
 		// Unit
-		if (defunit !== "none") {
-			unit = defunit;
+		if (sensordata[5] !== "none") {
+			unit = sensordata[5];
 			unit = unit.replace("%t%", timedata);
 			unit = unit.replace("%d%", datedata);
+		} else {
+			unit = sensordata[1];
 		}
 
+
 		// Name
-		if (displayname) {
-			name = displayname;
+		if (sensordata[4]) {
+			name = sensordata[4];
 			name = name.replace("%t%", timedata);
 			name = name.replace("%d%", datedata);
 		} else {
@@ -231,19 +242,22 @@ Module.register("MMM-homeassistant-sensors", {
 			}
 		}
 
+
 		// Adds the date to the output table if selected.
-		if (showdate) {
+		if (sensordata[6]) {
 			datedata = datestring[0];
 		} else {
 			datedata = "";
 		}
 
+
 		// Adds the date to the output table if selected.
-		if (showtime) {
+		if (sensordata[7]) {
 			timedata = timestring[0];
 		} else {
 			timedata = "";
 		}
+
 
 		// Column start point. 
 		var column = -1;
@@ -265,36 +279,47 @@ Module.register("MMM-homeassistant-sensors", {
 		// icons
 		column++;
 		newCell = newrow.insertCell(column);
-		newCell.className = "ha-icon";
 		if (this.config.displaySymbol) {
-			if (typeof icons === "object") {
+			if (typeof sensordata[2] === "object") {
 				var iconsinline = "none";
 				//Change icons based on HA status
-				for (var key in icons) {
+				for (var key in sensordata[2]) {
+					
 					// Sets the icon defined in the config specified value will give specified icon.
-				    if (value === key) {
-						iconsinline = document.createElement("i");
-						iconsinline.className = "mdi mdi-" + icons[key];	
-						break;
+				    if (sensordata[0] === key) {
+						if (!sensordata[2][key].includes("/")) {
+							newCell.className = "ha-icon";
+							iconsinline = document.createElement("i");
+							iconsinline.className = "mdi mdi-" + sensordata[2][key];	
+							break;
+						} else {
+							iconsinline = document.createElement("img");
+							iconsinline.src = sensordata[2][key];
+							iconsinline.className = "ha-img";
+						}
 					} 
+
 					// If no icon is set by values, the default one will be used.
 					if (iconsinline === "none") {
+						newCell.className = "ha-icon";
 						iconsinline = document.createElement("i");
-						iconsinline.className = "mdi mdi-" + icons.default;
+						iconsinline.className = "mdi mdi-" + sensordata[2].default;
 					}
 				}
 				newCell.appendChild(iconsinline);
 			} else {
 				// Setting the Picture if defined in the entity.
 				// Todo, user defined pictures...
-				if (picture) {
-					if (!picture.includes("http")) {
-						if (https) {
+				if (sensordata[9]) {
+					if (!sensordata[9].includes("http")) {
+						if (this.config.https) {
 							var picturestart = "https://";
 						} else {
 							var picturestart = "http://";
 						}
-						picture = picturestart.concat(host, ":", port, picture);
+						picture = picturestart.concat(this.config.host, ":", this.config.port, sensordata[9]);
+					} else {
+						picture = sensordata[9];
 					}
 					var iconsinline = document.createElement("img");
 					iconsinline.src = picture;
@@ -305,13 +330,27 @@ Module.register("MMM-homeassistant-sensors", {
 		}
 
 		// Replace the "value" with something defined in config.
-		for (var key in replace) {
-			if (value === key) {
-				newValue = replace[key];
+		for (var key in sensordata[3]) {
+			if (sensordata[0] === key) {
+				newValue = sensordata[3][key];
 				break;
 			} else {
-				newValue = value;
+				newValue = sensordata[0];
 			}
+		}
+
+
+		// If you want to add the value to the defined name.
+		if (sensordata[4]) {
+			name = name.replace("%v%", newValue);
+		}
+
+		// If you want to add the value to the defined unit.
+		if (sensordata[5] !== "none") {
+			unit = unit.replace("%v%", newValue);
+		}
+		if (sensordata[10] === false) {
+			newValue = "";
 		}
 
 		// Name
@@ -354,8 +393,8 @@ Module.register("MMM-homeassistant-sensors", {
 	socketNotificationReceived: function (notification, payload) {
 		if (notification === "STATS_RESULT") {
 			this.result = payload;
-			var fade = 500;
-			this.updateDom(fade);
+			//var fade = 500;
+			this.updateDom(this.config.fade);
 		}
 	},
 });

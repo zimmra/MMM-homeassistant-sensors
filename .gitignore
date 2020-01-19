@@ -1,1 +1,5 @@
 MaterialDesign-Webfont-master/
+node_modules
+.idea
+npm-debug.log
+.DS_Store
