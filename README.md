@@ -77,9 +77,9 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `replace`            | `[array{}]` | Define specific values that will be owerriden by the specified values.|
 
 ### Template options
-- Use the %v% in the name and unit strings to the the "value" string from the sensor.
-- Use the %d% in the name and unit strings to the the "last update date" string from the sensor there.
-- Use the %t% in the name and unit strings to the the "last update time" string from the sensor there.
+- Possibility to use %v% in the name and/or unit strings to get the "value" string from the sensor.
+- Possibility to use %d% in the name and/or unit strings to get the "last update date" string from the sensor.
+- Possibility to use %t% in the name and/or unit strings to get the "last update time" string from the sensor.
 
 ## Sensor icon options
 | value                | Icon | Description |
