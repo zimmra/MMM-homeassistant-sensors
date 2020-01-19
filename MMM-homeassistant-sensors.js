@@ -21,7 +21,7 @@ Module.register("MMM-homeassistant-sensors", {
 	},
 
 	getStyles: function () {
-		return ["modules/MMM-homeassistant-sensors/MaterialDesign-Webfont-master/css/materialdesignicons.min.css", "MMM-homeassistant-sensors.css"];
+		return ["modules/MMM-homeassistant-sensors/node_modules/@mdi/font/css/materialdesignicons.min.css", "MMM-homeassistant-sensors.css"];
 	},
 
 	start: function () {
