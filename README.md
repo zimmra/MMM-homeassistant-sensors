@@ -239,7 +239,7 @@ Added the following to my `custom.css` file.
 		port: "8123",
 		https: false,
 		token: "YOUR OWN",
-		title: 'Husinformation',
+		title: 'Information',
 		values: [
 			{
 				sensor: "device_tracker.360_kidswatch_xplora4",
