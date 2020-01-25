@@ -102,7 +102,6 @@ The configuration can be very simpel, from just displaying a simple value from a
 		port: "8123",
 		https: false,
 		token: "YOUR OWN",
-		title: 'Husinformation',
 		values: [
 			{
 				sensor: "sensor.vind_temperature",
@@ -132,7 +131,6 @@ The configuration can be very simpel, from just displaying a simple value from a
 		port: "8123",
 		https: false,
 		token: "YOUR OWN",
-		title: 'Husinformation',
 		values: [
 			{
 				sensor: "binary_sensor.pet_cappuccino",
@@ -193,7 +191,6 @@ Added the following to my `custom.css` file.
 		port: "8123",
 		https: false,
 		token: "YOUR OWN",
-		title: 'Husinformation',
 		values: [
 			{
 				sensor: "binary_sensor.washing_machine",
