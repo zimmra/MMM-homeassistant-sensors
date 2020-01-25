@@ -205,11 +205,38 @@ Module.register("MMM-homeassistant-sensors", {
 		var picture;
 		newrow = document.createElement("tr");
 
-		// Split up the time and date.
-		var datestring = sensordata[8].split("T");
-		datedata = datestring[0];
-		var timestring = datestring[1].split(".");
-		timedata = timestring[0];
+		// Fix the time and date.
+		var thetime = new Date(sensordata[8]);
+		var hoursonly = thetime.getHours();
+		if (hoursonly.toString().length == 1) {
+			hoursonly = "0" + hoursonly;
+		}
+		var minutesonly = thetime.getMinutes();
+		if (minutesonly.toString().length == 1) {
+			minutesonly = "0" + minutesonly;
+		}
+		var secondsonly = thetime.getSeconds();
+		if (secondsonly.toString().length == 1) {
+			secondsonly = "0" + secondsonly;
+		}
+		var timedata = hoursonly + ":" + minutesonly + ":" + secondsonly;
+		//console.log(timedata);
+		
+		
+		var yearonly = thetime.getFullYear();
+		
+		var monthonly = thetime.getMonth()+1;
+		if (monthonly.toString().length == 1) {
+			monthonly = "0" + monthonly;
+		}
+
+		var dateonly = thetime.getDate();
+		if (dateonly.toString().length == 1) {
+			dateonly = "0" + dateonly;
+		}
+
+		var datedata = yearonly + "-" + monthonly + "-" + dateonly;
+		//console.log(datedata);
 
 		// Unit
 		if (sensordata[5] !== "none") {
@@ -219,7 +246,6 @@ Module.register("MMM-homeassistant-sensors", {
 		} else {
 			unit = sensordata[1];
 		}
-
 
 		// Name
 		if (sensordata[4]) {
@@ -242,22 +268,15 @@ Module.register("MMM-homeassistant-sensors", {
 			}
 		}
 
-
-		// Adds the date to the output table if selected.
-		if (sensordata[6]) {
-			datedata = datestring[0];
-		} else {
+		// removes the date from the output table if selected.
+		if (sensordata[6] === false) {
 			datedata = "";
 		}
 
-
-		// Adds the date to the output table if selected.
-		if (sensordata[7]) {
-			timedata = timestring[0];
-		} else {
+		// Removes the date from the output table if selected.
+		if (sensordata[7] === false) {
 			timedata = "";
 		}
-
 
 		// Column start point. 
 		var column = -1;
