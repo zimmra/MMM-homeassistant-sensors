@@ -16,6 +16,8 @@ Module.register("MMM-homeassistant-sensors", {
 		displaySymbol: true,
 		displaydates: false,
 		displaytimes: false,
+		dateformat: 'YYYY-MM-DD', // See moments for more format options: https://momentjs.com/docs/#/displaying/
+		timeformat: 'HH:mm:ss', // See moments for more format options: https://momentjs.com/docs/#/displaying/
 		debuglogging: false,
 		values: []
 	},
@@ -207,41 +209,23 @@ Module.register("MMM-homeassistant-sensors", {
 
 		// Fix the time and date.
 		var thetime = new Date(sensordata[8]);
-		var hoursonly = thetime.getHours();
-		if (hoursonly.toString().length == 1) {
-			hoursonly = "0" + hoursonly;
-		}
-		var minutesonly = thetime.getMinutes();
-		if (minutesonly.toString().length == 1) {
-			minutesonly = "0" + minutesonly;
-		}
-		var secondsonly = thetime.getSeconds();
-		if (secondsonly.toString().length == 1) {
-			secondsonly = "0" + secondsonly;
-		}
-		var timedata = hoursonly + ":" + minutesonly + ":" + secondsonly;
-		//console.log(timedata);
-		
-		
-		var yearonly = thetime.getFullYear();
-		
-		var monthonly = thetime.getMonth()+1;
-		if (monthonly.toString().length == 1) {
-			monthonly = "0" + monthonly;
-		}
+		var momentdate = moment(thetime);
 
-		var dateonly = thetime.getDate();
-		if (dateonly.toString().length == 1) {
-			dateonly = "0" + dateonly;
-		}
+		// The time formatted. 
+		var timedata = moment(thetime).format(this.config.timeformat);
 
-		var datedata = yearonly + "-" + monthonly + "-" + dateonly;
-		//console.log(datedata);
+		// The date formatted
+		var datedata = moment(thetime).format(this.config.dateformat);
+
+		// Format the time to human readable...
+		var rtime = momentdate.from(moment());
 
 		// Unit
 		if (sensordata[5] !== "none") {
 			unit = sensordata[5];
 			unit = unit.replace("%t%", timedata);
+			unit = unit.replace("%r%", rtime);
+			unit = unit.replace("%m%", momentdate);
 			unit = unit.replace("%d%", datedata);
 		} else {
 			unit = sensordata[1];
@@ -251,6 +235,8 @@ Module.register("MMM-homeassistant-sensors", {
 		if (sensordata[4]) {
 			name = sensordata[4];
 			name = name.replace("%t%", timedata);
+			name = name.replace("%r%", rtime);
+			name = name.replace("%m%", momentdate);
 			name = name.replace("%d%", datedata);
 		} else {
 			if (this.config.stripName) {
