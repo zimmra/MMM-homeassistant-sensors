@@ -64,8 +64,8 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `displaySymbol`      | `true` | If you don't want either "icons" nor "pictures" in your list, set it to false.|
 | `displaydates`       | `false` | If you want to show dates for last update by default. This can be turned off or on for each sensor as well.|
 | `displaytimes`       | `false` | If you want to show times for last update by default. This can be turned off or on for each sensor as well.|
-| `dateformat`       | `YYYY-MM-DD` | See [moments](https://momentjs.com/docs/#/displaying) for more date format options.|
-| `timeformat`       | `HH:mm:ss` | See [moments](https://momentjs.com/docs/#/displaying) for more time format options.|
+| `dateformat`       | `YYYY-MM-DD` | See [moments](https://momentjs.com/docs/#/displaying/) for more date format options.|
+| `timeformat`       | `HH:mm:ss` | See [moments](https://momentjs.com/docs/#/displaying/) for more time format options.|
 | `debuglogging`       | `false` | Enable logging into /home/pi/.pm2/logs/mm-error.log (true/false).|
 | `values`             | `[array{}]` | Specify specific values from the json feed to only show what you need (entity_id). <br><br> Check the options!|
 
