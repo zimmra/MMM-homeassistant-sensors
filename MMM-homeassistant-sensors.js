@@ -18,6 +18,8 @@ Module.register("MMM-homeassistant-sensors", {
 		displaytimes: false,
 		dateformat: 'YYYY-MM-DD', // See moments for more format options: https://momentjs.com/docs/#/displaying/
 		timeformat: 'HH:mm:ss', // See moments for more format options: https://momentjs.com/docs/#/displaying/
+		controlsensor: 'sensor control disabled', // If you want to show this instans of HA-Sensors only when this sensor is the value below.
+		controlsensorvalue: 'sensor control disabled', // The value the above sensor must have to show this instans of HA-Sensors.
 		debuglogging: false,
 		values: []
 	},
@@ -44,6 +46,26 @@ Module.register("MMM-homeassistant-sensors", {
 		var data = this.result;
 		// For debugging
 		//console.log(data);
+		
+		// Hides and shows the module if the control sensor is defined and the control sensor value is defined.
+		if (data && !this.isEmpty(data)) {
+			// If the control sensor is set to anything else the the default continue.
+			if (this.config.controlsensor !== "sensor control disabled") {
+				var val = this.getValue(data, this.config.controlsensor);
+				// If the control sensor value is anything not the default or not the defined value, hide the module.
+				if (val !== this.config.controlsensorvalue && this.config.controlsensorvalue !== "sensor control disabled") {
+					if (!this.hidden) {
+						this.hide();
+					}
+				} else {
+					if (this.hidden) {
+						this.show();
+					}
+				}
+			}
+		}
+		
+		// Starting to build the elements.
 		var statElement = document.createElement("header");
 		var title = this.config.title;
 		statElement.innerHTML = title;
@@ -119,7 +141,7 @@ Module.register("MMM-homeassistant-sensors", {
 					var val = this.getValue(data, sensor);
 
 					// Make the data array.
-					var sensordata = [val, this.getUnit(data, sensor), icons, replace, values[i].name, defunit, showdate, showtime, this.getLastupd(data, sensor), this.getPicture(data, sensor), values[i].displayvalue];
+					var sensordata = [val, this.getUnit(data, sensor), icons, replace, values[i].name, defunit, showdate, showtime, this.getLastupd(data, sensor), this.getPicture(data, sensor), values[i].displayvalue, values[i].divider, values[i].multiplier, values[i].round];
 					// For debugging
 					//console.log(sensordata);
 					if (val) {
@@ -196,7 +218,7 @@ Module.register("MMM-homeassistant-sensors", {
 	
 	addValue: function (name, sensordata) {
 		// The array looks like this.
-		//sensordata = [0]val, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue
+		//sensordata = [0]val, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round
 		var newrow,
 		newText,
 		newCell;
@@ -314,7 +336,6 @@ Module.register("MMM-homeassistant-sensors", {
 				newCell.appendChild(iconsinline);
 			} else {
 				// Setting the Picture if defined in the entity.
-				// Todo, user defined pictures...
 				if (sensordata[9]) {
 					if (!sensordata[9].includes("http")) {
 						if (this.config.https) {
@@ -343,7 +364,22 @@ Module.register("MMM-homeassistant-sensors", {
 				newValue = sensordata[0];
 			}
 		}
+		
+		// Calculate the divider
+		if (sensordata[11]) {
+			newValue = newValue / sensordata[11];
+		}
 
+		// Calculate the multiplier 
+		if (sensordata[12]) {
+			newValue = newValue * sensordata[12];
+		}
+		
+		// Round the value to two decimals.
+		// Todo: Add a better function for this...
+		if (sensordata[13]) {
+			newValue = Math.round(newValue * 100) / 100;
+		}
 
 		// If you want to add the value to the defined name.
 		if (sensordata[4]) {
@@ -380,7 +416,7 @@ Module.register("MMM-homeassistant-sensors", {
 		newCell.appendChild(newText);
 		return newrow;
 	},
-	
+
 	// Update
 	scheduleUpdate: function (delay) {
 		var nextLoad = this.config.updateInterval;
@@ -392,9 +428,11 @@ Module.register("MMM-homeassistant-sensors", {
 			self.getStats();
 		}, nextLoad);
 	},
+	
 	getStats: function () {
 		this.sendSocketNotification('GET_STATS', this.config);
 	},
+	
 	socketNotificationReceived: function (notification, payload) {
 		if (notification === "STATS_RESULT") {
 			this.result = payload;
