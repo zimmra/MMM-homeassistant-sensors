@@ -61,8 +61,8 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `token`              | `REQUIRED` | The long lived token.|
 | `fade`               | `100` | When updating the values, this is the time (in milliswconds) the "table" fades out and in again.|
 | `updateInterval`     | `300000` | The time between updates (in milliseconds) (300000 = 5 minutes).|
-| `controlsensor`      | `sensor control disabled` | The HA sensor you want to use to trigger the show the module when the defined value is present.|
-| `controlsensorvalue` | `sensor control disabled` | The value the above HA sensor must have to show the module.|
+| `controlsensor`      | `sensor control disabled` | The HA sensor you want to use to trigger to show the module when the defined value is present.|
+| `controlsensorvalue` | `sensor control disabled` | The value the above HA sensor must have to show the module. A boolean here is a good way to show and hide the module.|
 | `displaySymbol`      | `true` | If you don't want either "icons" nor "pictures" in your list, set it to false.|
 | `displaydates`       | `false` | If you want to show dates for last update by default. This can be turned off or on for each sensor as well.|
 | `displaytimes`       | `false` | If you want to show times for last update by default. This can be turned off or on for each sensor as well.|
