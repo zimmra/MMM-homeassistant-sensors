@@ -89,6 +89,7 @@ The configuration can be very simpel, from just displaying a simple value from a
 - Possibility to use %t% in the name and/or unit strings to get the "last update time" string from the sensor.
 - Possibility to use %r% in the name and/or unit strings to get the "last update time" as a readble ("4 hours ago") string from the sensor.
 - Possibility to use %m% in the name and/or unit strings to get the "last update time" as a moments string (instead of a the HA string) from the sensor.
+- Possibility to use %a% in the name and/or unit and/or replacement value array to get a sensors "address" property. If you use google location sharing you can get the current address of a "device".
 
 ## Sensor icon options
 | value                | Icon | Description |
