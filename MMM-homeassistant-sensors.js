@@ -405,8 +405,10 @@ Module.register("MMM-homeassistant-sensors", {
 		}
 		
 		// Change the value to the address if %a% defined as a value replacement array.
-		if (newValue.includes("%a%")) {
-			newValue = newValue.replace("%a%", address);
+		if (typeof newValue === 'string') {
+			if (newValue.includes("%a%")) {
+				newValue = newValue.replace("%a%", address);
+			}
 		}
 
 		// If you want to add the value to the defined name.
