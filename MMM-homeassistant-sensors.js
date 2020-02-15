@@ -140,7 +140,7 @@ Module.register("MMM-homeassistant-sensors", {
 					// Value of the Sensor
 					var val = this.getValue(data, sensor);
 					// Make the data array.
-				var sensordata = [val, this.getUnit(data, sensor), icons, replace, values[i].name, defunit, showdate, showtime, this.getLastupd(data, sensor), this.getPicture(data, sensor), values[i].displayvalue, values[i].divider, values[i].multiplier, values[i].round, this.getAddress(data, sensor)];
+					var sensordata = [val, this.getUnit(data, sensor), icons, replace, values[i].name, defunit, showdate, showtime, this.getLastupd(data, sensor), this.getPicture(data, sensor), values[i].displayvalue, values[i].divider, values[i].multiplier, values[i].round, this.getAddress(data, sensor), values[i].displayunit];
 					// For debugging
 					//console.log(sensordata);
 					if (val) {
@@ -229,7 +229,7 @@ Module.register("MMM-homeassistant-sensors", {
 	// Adding alla the sensors to the table.
 	addValue: function (name, sensordata) {
 		// The array looks like this.
-		//sensordata = [0]val, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address
+		//sensordata = [0]val, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit
 		var newrow,
 		newText,
 		newCell;
@@ -279,6 +279,7 @@ Module.register("MMM-homeassistant-sensors", {
 			name = name.replace("%m%", momentdate);
 			name = name.replace("%d%", datedata);
 			name = name.replace("%a%", address);
+			name = name.replace("%u%", unit);
 		} else {
 			if (this.config.stripName) {
 				var split = name.split(".");
@@ -303,6 +304,12 @@ Module.register("MMM-homeassistant-sensors", {
 		if (sensordata[7] === false) {
 			timedata = "";
 		}
+		
+		// Removes the unit if set not to be displayed.
+		if (sensordata[15] === false) {
+			unit = "";
+		}
+
 
 		// Column start point. 
 		var column = -1;
