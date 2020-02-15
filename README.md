@@ -79,12 +79,15 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `devider`            | `number` | You can specify a number (or calculation) that the value should be devided by.
 | `multiplier`         | `number` | You can specify a number (or calculation) that value should be multiplied by.
 | `round`              | `boolean` | true or false if you want to round the value to max two decimals.
+| `displayvalue`       | `boolean` | Set to false to not display the value in the value collumn. |
+| `displayunit`        | `boolean` | Set to false to not display the unit in the unit collumn. |
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.
 | `icons`              | `[array{}]` | Define specific icons for spesific values (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
 | `replace`            | `[array{}]` | Define specific values that will be owerriden by the specified values.|
 
 ### Template options
 - Possibility to use %v% in the name and/or unit strings to get the "value" string from the sensor.
+- Possibility to use %u% in the name strings to get the "unit" string from the sensor.
 - Possibility to use %d% in the name and/or unit strings to get the "last update date" string from the sensor.
 - Possibility to use %t% in the name and/or unit strings to get the "last update time" string from the sensor.
 - Possibility to use %r% in the name and/or unit strings to get the "last update time" as a readble ("4 hours ago") string from the sensor.
