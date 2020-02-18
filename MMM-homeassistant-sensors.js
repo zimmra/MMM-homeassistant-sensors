@@ -20,6 +20,7 @@ Module.register("MMM-homeassistant-sensors", {
 		timeformat: 'HH:mm:ss', // See moments for more format options: https://momentjs.com/docs/#/displaying/
 		controlsensor: 'sensor control disabled', // If you want to show this instans of HA-Sensors only when this sensor is the value below.
 		controlsensorvalue: 'sensor control disabled', // The value the above sensor must have to show this instans of HA-Sensors.
+		noaddress: 'away', // If address field is "undefined" or "null" on the sensor, this string will be displayed instead of the address.
 		debuglogging: false,
 		values: []
 	},
@@ -255,8 +256,10 @@ Module.register("MMM-homeassistant-sensors", {
 		var rtime = momentdate.from(moment());
 
 		// Adds the address if available.
-		if (sensordata[14]) {
+		if (typeof sensordata[14] !== 'undefined' || typeof sensordata[14] !== null) {
 			address = sensordata[14];
+		} else {
+			address = this.config.noaddress;
 		}
 
 		// Unit
