@@ -141,7 +141,7 @@ Module.register("MMM-homeassistant-sensors", {
 					// Value of the Sensor
 					var val = this.getValue(data, sensor);
 					// Make the data array.
-					var sensordata = [val, this.getUnit(data, sensor), icons, replace, values[i].name, defunit, showdate, showtime, this.getLastupd(data, sensor), this.getPicture(data, sensor), values[i].displayvalue, values[i].divider, values[i].multiplier, values[i].round, this.getAddress(data, sensor), values[i].displayunit];
+					var sensordata = [val, this.getUnit(data, sensor), icons, replace, values[i].name, defunit, showdate, showtime, this.getLastupd(data, sensor), this.getPicture(data, sensor), values[i].displayvalue, values[i].divider, values[i].multiplier, values[i].round, this.getAddress(data, sensor), values[i].displayunit, values[i].highAlertThreshold, values[i].lowAlertThreshold];
 					// For debugging
 					//console.log(sensordata);
 					if (val) {
@@ -230,7 +230,7 @@ Module.register("MMM-homeassistant-sensors", {
 	// Adding alla the sensors to the table.
 	addValue: function (name, sensordata) {
 		// The array looks like this.
-		//sensordata = [0]val, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit
+	//sensordata = [0]val, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold
 		var newrow,
 		newText,
 		newCell;
@@ -240,6 +240,8 @@ Module.register("MMM-homeassistant-sensors", {
 		var unit;
 		var picture;
 		var address;
+		var addblinkhigh = 0;
+		var addblinklow = 0;
 		newrow = document.createElement("tr");
 
 		// Fix the time and date.
@@ -431,6 +433,21 @@ Module.register("MMM-homeassistant-sensors", {
 			newValue = "";
 		}
 
+		// If higher then alert threshold add blink high class.
+		if (!isNaN(sensordata[16])) {
+			if (newValue > sensordata[16]) {
+				addblinkhigh = 1;
+			} 
+		}
+
+		// If lower then alert threshold add blink low class.
+		if (!isNaN(sensordata[17])) {
+			if (newValue < sensordata[17]) {
+				addblinklow = 1;
+			} 
+		}
+
+
 		// Name
 		column++;
 		newCell = newrow.insertCell(column);
@@ -442,6 +459,12 @@ Module.register("MMM-homeassistant-sensors", {
 		column++;
 		newCell = newrow.insertCell(column);
 		newCell.className = "ha-value";
+		if (addblinkhigh > 0) {
+			newrow.className += "blinkhigh";
+		}
+		if (addblinklow > 0) {
+			newrow.className += "blinklow";
+		}
 		newText = document.createTextNode(newValue);
 		newCell.appendChild(newText);
 

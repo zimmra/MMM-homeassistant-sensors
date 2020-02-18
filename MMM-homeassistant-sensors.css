@@ -45,3 +45,19 @@
 .ha-unit {
   text-align: left;
 }
+
+.blinkhigh {
+  animation: blinker 3.5s linear infinite;
+  color: #ff5555;
+}
+
+.blinklow {
+  animation: blinker 3.5s linear infinite;
+  color: #55acee;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0.3;
+  }
+}
