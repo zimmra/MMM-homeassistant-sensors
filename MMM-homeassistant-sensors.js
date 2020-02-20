@@ -258,7 +258,7 @@ Module.register("MMM-homeassistant-sensors", {
 		var rtime = momentdate.from(moment());
 
 		// Adds the address if available.
-		if (typeof sensordata[14] !== 'undefined' || typeof sensordata[14] !== null) {
+		if (sensordata[14]) {
 			address = sensordata[14];
 		} else {
 			address = this.config.noaddress;
