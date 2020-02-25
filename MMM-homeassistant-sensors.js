@@ -52,9 +52,9 @@ Module.register("MMM-homeassistant-sensors", {
 		if (data && !this.isEmpty(data)) {
 			// If the control sensor is set to anything else the the default continue.
 			if (this.config.controlsensor !== "sensor control disabled") {
-				var val = this.getValue(data, this.config.controlsensor);
+				var stateval = this.getState(data, this.config.controlsensor);
 				// If the control sensor value is anything not the default or not the defined value, hide the module.
-				if (val !== this.config.controlsensorvalue && this.config.controlsensorvalue !== "sensor control disabled") {
+				if (stateval !== this.config.controlsensorvalue && this.config.controlsensorvalue !== "sensor control disabled") {
 					if (!this.hidden) {
 						this.hide();
 					}
@@ -138,13 +138,15 @@ Module.register("MMM-homeassistant-sensors", {
 					var sensor = values[i].sensor;
 					// Name of the Sensor
 					var name = this.getName(data, sensor);
+					// State of the Sensor
+					var stateval = this.getState(data, sensor);
 					// Value of the Sensor
-					var val = this.getValue(data, sensor);
+					var sensval = this.getValue(data, sensor);
 					// Make the data array.
-					var sensordata = [val, this.getUnit(data, sensor), icons, replace, values[i].name, defunit, showdate, showtime, this.getLastupd(data, sensor), this.getPicture(data, sensor), values[i].displayvalue, values[i].divider, values[i].multiplier, values[i].round, this.getAddress(data, sensor), values[i].displayunit, values[i].highAlertThreshold, values[i].lowAlertThreshold];
+					var sensordata = [stateval, this.getUnit(data, sensor), icons, replace, values[i].name, defunit, showdate, showtime, this.getLastupd(data, sensor), this.getPicture(data, sensor), values[i].displayvalue, values[i].divider, values[i].multiplier, values[i].round, this.getAddress(data, sensor), values[i].displayunit, values[i].highAlertThreshold, values[i].lowAlertThreshold, sensval, values[i].useValue];
 					// For debugging
 					//console.log(sensordata);
-					if (val) {
+					if (stateval) {
 						tableElement.appendChild(this.addValue(name, sensordata));
 					}
 				}
@@ -164,11 +166,25 @@ Module.register("MMM-homeassistant-sensors", {
 		return wrapper;
 	},
 
+	// Collect the state from the entity.
+	getState: function (data, value) {
+		for (var i = 0; i < data.length; i++) {
+			if (data[i].entity_id == value) {
+				return data[i].state;
+			}
+		}
+		return null;
+	},
+
 	// Collect the value from the entity.
 	getValue: function (data, value) {
 		for (var i = 0; i < data.length; i++) {
 			if (data[i].entity_id == value) {
-				return data[i].state;
+				if (typeof data[i].attributes.value !== "undefined") {
+					return data[i].attributes.value;
+				} else {
+					return null;
+				}
 			}
 		}
 		return null;
@@ -230,7 +246,7 @@ Module.register("MMM-homeassistant-sensors", {
 	// Adding alla the sensors to the table.
 	addValue: function (name, sensordata) {
 		// The array looks like this.
-	//sensordata = [0]val, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold
+	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue
 		var newrow,
 		newText,
 		newCell;
@@ -385,13 +401,17 @@ Module.register("MMM-homeassistant-sensors", {
 			}
 		}
 
+		// Replace the "state" with the "value" if set to true in config.
+		if (sensordata[19]) {
+			newValue = sensordata[18];
+		} else {
+			newValue = sensordata[0];
+		}
+
 		// Replace the "value" with something defined in config.
 		for (var key in sensordata[3]) {
 			if (sensordata[0] === key) {
 				newValue = sensordata[3][key];
-				break;
-			} else {
-				newValue = sensordata[0];
 			}
 		}
 		
