@@ -79,16 +79,19 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `devider`            | `number` | You can specify a number (or calculation) that the value should be devided by.|
 | `multiplier`         | `number` | You can specify a number (or calculation) that value should be multiplied by.|
 | `round`              | `boolean` | true or false if you want to round the value to max two decimals.|
-| `displayvalue`       | `boolean` | Set to false to not display the value in the value collumn. |
+| `displayvalue`       | `boolean` | Set to false to not display the state in the value collumn. |
+| `displayvalue`       | `boolean` | Set to false to not display the state in the value collumn. |
+| `useValue`           | `false`   | Set this to true to use the sensor value instead of the sensor state|
+
 | `displayunit`        | `boolean` | Set to false to not display the unit in the unit collumn. |
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.|
-| `highAlertThreshold` | `number` | You can specify a number, if the value of the sensor is higher then this the row will blink and turn red.|
-| `lowAlertThreshold` | `number` | You can specify a number, if the value of the sensor is lower then this the row will blink and turn blue.|
-| `icons`              | `[array{}]` | Define specific icons for spesific values (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
-| `replace`            | `[array{}]` | Define specific values that will be owerriden by the specified values.|
+| `highAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is higher then this the row will blink and turn red.|
+| `lowAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
+| `icons`              | `[array{}]` | Define specific icons for spesific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
+| `replace`            | `[array{}]` | Define specific values/states that will be owerriden by the specified values.|
 
 ### Template options
-- Possibility to use %v% in the name and/or unit strings to get the "value" string from the sensor.
+- Possibility to use %v% in the name and/or unit strings to get the "state" string from the sensor.
 - Possibility to use %u% in the name strings to get the "unit" string from the sensor.
 - Possibility to use %d% in the name and/or unit strings to get the "last update date" string from the sensor.
 - Possibility to use %t% in the name and/or unit strings to get the "last update time" string from the sensor.
