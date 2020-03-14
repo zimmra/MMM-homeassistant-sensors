@@ -82,7 +82,6 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `displayvalue`       | `boolean` | Set to false to not display the state in the value collumn. |
 | `displayvalue`       | `boolean` | Set to false to not display the state in the value collumn. |
 | `useValue`           | `false`   | Set this to true to use the sensor value instead of the sensor state|
-
 | `displayunit`        | `boolean` | Set to false to not display the unit in the unit collumn. |
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.|
 | `highAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is higher then this the row will blink and turn red.|
