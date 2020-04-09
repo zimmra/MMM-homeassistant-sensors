@@ -69,7 +69,6 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `dateformat`       | `YYYY-MM-DD` | See [moments](https://momentjs.com/docs/#/displaying/) for more date format options.|
 | `timeformat`       | `HH:mm:ss` | See [moments](https://momentjs.com/docs/#/displaying/) for more time format options.|
 | `rowClass`       | `normal` | Changing the font size, Possible values: `'small'`, `'normal'`, `'big'` <br> Default value: `'small'` |
-
 | `debuglogging`       | `false` | Enable logging into /home/pi/.pm2/logs/mm-error.log (true/false).|
 | `values`             | `[array{}]` | Specify specific values from the json feed to only show what you need (entity_id). <br><br> Check the options!|
 
