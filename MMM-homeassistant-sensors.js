@@ -22,7 +22,7 @@ Module.register("MMM-homeassistant-sensors", {
 		controlsensorvalue: 'sensor control disabled', // The value the above sensor must have to show this instans of HA-Sensors.
 		noaddress: 'away', // If address field is "undefined" or "null" on the sensor, this string will be displayed instead of the address.
 		debuglogging: false,
-		rowClass: 'normal', // small, normal or big
+		rowClass: 'small', // small, normal or big
 		values: []
 	},
 	
