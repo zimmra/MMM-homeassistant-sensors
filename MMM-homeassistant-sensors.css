@@ -7,11 +7,23 @@
  *                                                   *
  *****************************************************/
 
-.ha-sensors {
-    font-size: 15px;
-    line-height: 18px;
-	font-weight: bold;
+.ha-small {
+  font-size: 15px;
+  line-height: 18px;
+  font-weight: bold;
 	color: #999
+}
+
+.ha-normal {
+  font-size: 20px;
+  line-height: 25px;
+  color: #999
+}
+
+.ha-big {
+  font-size: 22px;
+  line-height: 26px;  
+  color: #999
 }
 
 .ha-icon {
