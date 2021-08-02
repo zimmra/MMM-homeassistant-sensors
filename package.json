@@ -16,6 +16,7 @@
   "author": "Erik Pettersson",
   "license": "MIT",
   "dependencies": {
-    "@mdi/font": "latest"
+    "@mdi/font": "latest",
+    "request": "*"
   }
 }
