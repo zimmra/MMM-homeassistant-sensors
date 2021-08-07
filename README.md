@@ -51,7 +51,11 @@ cd MMM-homeassistant-sensors
 
 Install Node-Modules (The [MaterialDesignIcons](https://materialdesignicons.com/) webfont icon names can be used.).
 ````
-`npm init` and `npm install request`
+npm init
+````
+&
+````
+npm install request
 ````
 
 
