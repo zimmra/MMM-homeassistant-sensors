@@ -1,3 +1,12 @@
+
+
+> The NPM module "Request" was removed with Magicmirror `v2.16` This has
+> led to the fact that Magicmirror can no longer be started under
+> Docker, for example. With this fork, the deprecated npm module
+> "Request" is installed locally in the module's directory.
+
+
+
 # MMM-homeassistant-sensors
 
 This a module for the [MagicMirror²](https://magicmirror.builders/). 
@@ -32,7 +41,7 @@ cd ~/MagicMirror/modules
 
 Clone this repository:
 ````
-git clone https://github.com/Snille/MMM-homeassistant-sensors
+git clone https://github.com/theskyisthelimit/MMM-homeassistant-sensors.git
 ````
 
 Enter the folder:
@@ -42,8 +51,9 @@ cd MMM-homeassistant-sensors
 
 Install Node-Modules (The [MaterialDesignIcons](https://materialdesignicons.com/) webfont icon names can be used.).
 ````
-npm install
+`npm init` and `npm install request`
 ````
+
 
 
 ## Configuration
