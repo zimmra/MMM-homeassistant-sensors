@@ -7,6 +7,8 @@ module.exports = NodeHelper.create({
   },
   getStats: function (config) {
       var self = this;
+      var id = config.id;
+      config = config.config;
       var url = self.buildUrl(config);
       var get_options = {
           url: url,
@@ -24,7 +26,7 @@ module.exports = NodeHelper.create({
           }
           if (!error && response.statusCode == 200) {
             if(config.debuglogging) { console.log('MMM-homeassistant-sensors response successfull. calling STATS_RESULT') };
-            self.sendSocketNotification('STATS_RESULT', body);
+            self.sendSocketNotification('STATS_RESULT', { id: id, data: body });
           } 
       });
   },

@@ -31,6 +31,7 @@ Module.register("MMM-homeassistant-sensors", {
 	},
 
 	start: function () {
+		//debugger;
 		this.getStats();
 		this.scheduleUpdate();
 	},
@@ -332,7 +333,6 @@ Module.register("MMM-homeassistant-sensors", {
 			unit = "";
 		}
 
-
 		// Column start point. 
 		var column = -1;
 
@@ -468,7 +468,6 @@ Module.register("MMM-homeassistant-sensors", {
 			} 
 		}
 
-
 		// Name
 		column++;
 		newCell = newrow.insertCell(column);
@@ -507,18 +506,20 @@ Module.register("MMM-homeassistant-sensors", {
 		}
 		var self = this;
 		setInterval(function () {
+			console.count(self.config.title)
 			self.getStats();
 		}, nextLoad);
 	},
 	
+	// Added "this.identifier" to identify what instance of the module that sent update request.
 	getStats: function () {
-		this.sendSocketNotification('GET_STATS', this.config);
+		this.sendSocketNotification('GET_STATS', { id: this.identifier, config: this.config });
 	},
 	
+	// Added "this.identifier" to be able to receive updates from "this" instance of the module only.
 	socketNotificationReceived: function (notification, payload) {
-		if (notification === "STATS_RESULT") {
-			this.result = payload;
-			//var fade = 500;
+		if (notification === "STATS_RESULT" && this.identifier == payload.id) {
+			this.result = payload.data;
 			this.updateDom(this.config.fade);
 		}
 	},
