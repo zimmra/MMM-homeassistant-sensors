@@ -506,7 +506,7 @@ Module.register("MMM-homeassistant-sensors", {
 		}
 		var self = this;
 		setInterval(function () {
-			console.count(self.config.title)
+			//console.count(self.config.title)
 			self.getStats();
 		}, nextLoad);
 	},
