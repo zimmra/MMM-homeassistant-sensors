@@ -364,7 +364,7 @@ Module.register("MMM-homeassistant-sensors", {
 						if (!sensordata[2][key].includes("/")) {
 							newCell.className = "ha-icon";
 							iconsinline = document.createElement("i");
-							iconsinline.className = "mdi mdi-" + sensordata[2][key];	
+							iconsinline.className = "mdi mdi-" + sensordata[2][key];
 							break;
 						} else {
 							iconsinline = document.createElement("img");
@@ -375,9 +375,16 @@ Module.register("MMM-homeassistant-sensors", {
 
 					// If no icon is set by values, the default one will be used.
 					if (iconsinline === "none") {
-						newCell.className = "ha-icon";
-						iconsinline = document.createElement("i");
-						iconsinline.className = "mdi mdi-" + sensordata[2].default;
+						if (!sensordata[2][key].includes("/")) {
+							newCell.className = "ha-icon";
+							iconsinline = document.createElement("i");
+							iconsinline.className = "mdi mdi-" + sensordata[2][key];
+							break;
+						} else {
+							iconsinline = document.createElement("img");
+							iconsinline.src = sensordata[2][key];
+							iconsinline.className = "ha-img";
+						}
 					}
 				}
 				newCell.appendChild(iconsinline);
