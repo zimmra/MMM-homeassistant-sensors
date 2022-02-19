@@ -25,7 +25,13 @@ Module.register("MMM-homeassistant-sensors", {
 		rowClass: 'small', // small, normal or big
 		values: []
 	},
-	
+
+	// Load the momet script (from MM).
+	getScripts: function () {
+		return ["moment.js"];
+	},	
+
+	// Load the css script from the module.
 	getStyles: function () {
 		return ["modules/MMM-homeassistant-sensors/node_modules/@mdi/font/css/materialdesignicons.min.css", "MMM-homeassistant-sensors.css"];
 	},
@@ -365,7 +371,7 @@ Module.register("MMM-homeassistant-sensors", {
 							newCell.className = "ha-icon";
 							iconsinline = document.createElement("i");
 							iconsinline.className = "mdi mdi-" + sensordata[2][key];
-							break;
+							//break;
 						} else {
 							iconsinline = document.createElement("img");
 							iconsinline.src = sensordata[2][key];
@@ -379,7 +385,7 @@ Module.register("MMM-homeassistant-sensors", {
 							newCell.className = "ha-icon";
 							iconsinline = document.createElement("i");
 							iconsinline.className = "mdi mdi-" + sensordata[2][key];
-							break;
+							//break;
 						} else {
 							iconsinline = document.createElement("img");
 							iconsinline.src = sensordata[2][key];
