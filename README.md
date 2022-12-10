@@ -80,6 +80,7 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `timeformat`       | `HH:mm:ss` | See [moments](https://momentjs.com/docs/#/displaying/) for more time format options.|
 | `rowClass`       | `normal` | Changing the font size, Possible values: `'small'`, `'normal'`, `'big'` <br> Default value: `'small'` |
 | `debuglogging`       | `false` | Enable logging into /home/pi/.pm2/logs/mm-error.log (true/false).|
+| `notificationOnly`   | `false` | Don't show any sensors, just send a notification based on notification options.|
 | `values`             | `[array{}]` | Specify specific values from the json feed to only show what you need (entity_id). <br><br> Check the options!|
 
 ## Sensor options
@@ -99,6 +100,15 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `lowAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
 | `icons`              | `[array{}]` | Define specific icons for spesific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
 | `replace`            | `[array{}]` | Define specific values/states that will be owerriden by the specified values.|
+| `notificationName`    | undefined | Name of the notification to send from this notification. Example: "Home" |
+| `notificationConditions` | `[array{}]` | See section below for details. This is required to send a notification. |
+
+### notificationConditions options
+| Option               | Type | Description |
+| -------------------- | ---- | ----------- |
+| `stateVals` | `[array{}]` | What values the notification should trigger on |
+| `notificationVal` | Any | The value of the notification when trigger is met |
+| `notificationValNeg` | Any | The value of the notification when trigger is not met (optional) |
 
 ### Template options
 - Possibility to use %v% in the name and/or unit strings to get the "state" string from the sensor.
@@ -255,6 +265,38 @@ Added the following to my `custom.css` file.
 
 ### Result 
 ![Simple+icons](.github/screen04-simple+icons.png)
+
+### Notification Example
+```
+{
+	module: 'MMM-homeassistant-sensors',
+	position: 'top_left',
+	config: {
+	    host: "IP TO HOME ASSISTANT",
+	    port: "8123",
+	    https: false,
+	    token: "YOUR OWN",
+        // Only sends the notification, does not show any information
+        notificationOnly: true,
+        updateInterval: 15 * 1000, // 15 seconds
+        values: [
+        {
+	        sensor: "sensor.pixel_6a_wifi_connection",
+	        notificationName: "HOME",
+            // Will send a notification titled "HOME", with value true, when the pixel phone connects to a wifi named "MyWifi" or "MyWifi5G"
+            // Will send a notification titled "HOME", with value false, when the pixel phone is not connected to these wifi networks.
+	        notificationConditions: [
+	            {
+		        stateVals: ["MyWifi", "MyWifi5G"],
+		        notificationVal: true,
+		        notificationValNeg: false
+	            },
+	        ]
+        },
+        ]
+    }
+},
+```
 
 ### Here is the advanced configuration
 

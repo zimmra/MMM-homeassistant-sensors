@@ -16,6 +16,8 @@ Module.register("MMM-homeassistant-sensors", {
 		displaySymbol: true,
 		displaydates: false,
 		displaytimes: false,
+		notificationOnly: false,
+		notificationCondition: [],
 		dateformat: 'YYYY-MM-DD', // See moments for more format options: https://momentjs.com/docs/#/displaying/
 		timeformat: 'HH:mm:ss', // See moments for more format options: https://momentjs.com/docs/#/displaying/
 		controlsensor: 'sensor control disabled', // If you want to show this instans of HA-Sensors only when this sensor is the value below.
@@ -37,7 +39,6 @@ Module.register("MMM-homeassistant-sensors", {
 	},
 
 	start: function () {
-		//debugger;
 		this.getStats();
 		this.scheduleUpdate();
 	},
@@ -56,24 +57,30 @@ Module.register("MMM-homeassistant-sensors", {
 		// For debugging
 		//console.log(data);
 		
+		// Hide display if notificationOnly is set
+		if(this.config.notificationOnly) {
+			wrapper.style.display = "none";
+		}
 		// Hides and shows the module if the control sensor is defined and the control sensor value is defined.
-		if (data && !this.isEmpty(data)) {
+		else if (data && !this.isEmpty(data)) {
 			// If the control sensor is set to anything else the the default continue.
 			if (this.config.controlsensor !== "sensor control disabled") {
 				var stateval = this.getState(data, this.config.controlsensor);
 				// If the control sensor value is anything not the default or not the defined value, hide the module.
-				if (stateval !== this.config.controlsensorvalue && this.config.controlsensorvalue !== "sensor control disabled") {
-					if (!this.hidden) {
-						this.hide();
+				if ((stateval !== this.config.controlsensorvalue && this.config.controlsensorvalue !== "sensor control disabled")) {
+					// this.hide() does not work well with MMM-Pages, so use wrapper.style.display instead
+					if (wrapper.style.display != "none") {
+						this.visibleStyle = wrapper.style.display;
+						wrapper.style.display = "none";
 					}
 				} else {
-					if (this.hidden) {
-						this.show();
+					if (wrapper.style.display == "none") {
+						wrapper.style.display = this.visibleStyle;
 					}
 				}
 			}
 		}
-		
+
 		// Starting to build the elements.
 		var statElement = document.createElement("header");
 		var title = this.config.title;
@@ -82,6 +89,7 @@ Module.register("MMM-homeassistant-sensors", {
 
 		if (data && !this.isEmpty(data)) {
 			var tableElement = document.createElement("table");
+
 			var values = this.config.values;
 			if (values.length > 0) {
 				for (var i = 0; i < values.length; i++) {
@@ -157,6 +165,40 @@ Module.register("MMM-homeassistant-sensors", {
 					if (stateval) {
 						tableElement.appendChild(this.addValue(name, sensordata));
 					}
+
+					// Send notification
+					if(values[i].notificationName !== undefined) {
+						var notificationValue = undefined;
+						var origValue = values[i].notificationState;
+
+						console.log("MMM-homeassistant-sensors - stateval: " + stateval);
+						var found = false;
+						// Check conditions of sending notification
+						if(values[i].notificationConditions.length != 0) {
+							values[i].notificationConditions.forEach((condition) => {
+								condition.stateVals.forEach((val) => {
+									console.log("MMM-homeassistant-sensors - vals: " + val);
+									if(stateval == val) {
+										console.log("MMM-homeassistant-sensors - " + val + " found");
+										notificationValue = condition.notificationVal;
+										found = true;
+									}
+								});
+
+								// Set negative value for notification if necessary
+								if(!found && condition.notificationValNeg !== undefined) {
+									console.log("MMM-homeassistant-sensors - vals not found");
+									notificationValue = condition.notificationValNeg;
+								}
+							});
+
+							// Send notification
+							if(notificationValue !== undefined && notificationValue != values[i].notificationState) {
+								values[i].notificationState = notificationValue;
+								this.sendNotification(values[i].notificationName, notificationValue);
+							}
+						}
+					}
 				}
 			} else {
 				for (var key in data) {
@@ -165,8 +207,10 @@ Module.register("MMM-homeassistant-sensors", {
 					}
 				}
 			}
+
 			wrapper.appendChild(tableElement);
 		} else {
+			console.log("MMM-homeassistant-sensors - Error! No data returned!");
 			var error = document.createElement("span");
 			error.innerHTML = "Error fetching stats.";
 			wrapper.appendChild(error);
@@ -339,6 +383,7 @@ Module.register("MMM-homeassistant-sensors", {
 			unit = "";
 		}
 
+
 		// Column start point. 
 		var column = -1;
 
@@ -481,6 +526,7 @@ Module.register("MMM-homeassistant-sensors", {
 			} 
 		}
 
+
 		// Name
 		column++;
 		newCell = newrow.insertCell(column);
@@ -519,7 +565,6 @@ Module.register("MMM-homeassistant-sensors", {
 		}
 		var self = this;
 		setInterval(function () {
-			//console.count(self.config.title)
 			self.getStats();
 		}, nextLoad);
 	},
