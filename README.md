@@ -87,7 +87,7 @@ The configuration can be very simpel, from just displaying a simple value from a
 | -------------------- | ---- | ----------- |
 | `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor.|
 | `name`               | `string` | You can specify a name that will be displayed instead of the one from HA.|
-| `devider`            | `number` | You can specify a number (or calculation) that the value should be devided by.|
+| `divider`            | `number` | You can specify a number (or calculation) that the value should be devided by.|
 | `multiplier`         | `number` | You can specify a number (or calculation) that value should be multiplied by.|
 | `round`              | `boolean` | true or false if you want to round the value to max two decimals.|
 | `displayvalue`       | `boolean` | Set to false to not display the state in the value collumn. |
@@ -95,8 +95,9 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `useValue`           | `false`   | Set this to true to use the sensor value instead of the sensor state|
 | `displayunit`        | `boolean` | Set to false to not display the unit in the unit collumn. |
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.|
+| `attribute`          | `string` | You can specify a specific attribute from the sensor that will be displayed instead of the state (attribute can NOT contain an array).|
 | `highAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is higher then this the row will blink and turn red.|
-| `lowAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
+| `lowAlertThreshold`  | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
 | `icons`              | `[array{}]` | Define specific icons for spesific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
 | `replace`            | `[array{}]` | Define specific values/states that will be owerriden by the specified values.|
 

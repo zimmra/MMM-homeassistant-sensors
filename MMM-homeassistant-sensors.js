@@ -151,7 +151,28 @@ Module.register("MMM-homeassistant-sensors", {
 					// Value of the Sensor
 					var sensval = this.getValue(data, sensor);
 					// Make the data array.
-					var sensordata = [stateval, this.getUnit(data, sensor), icons, replace, values[i].name, defunit, showdate, showtime, this.getLastupd(data, sensor), this.getPicture(data, sensor), values[i].displayvalue, values[i].divider, values[i].multiplier, values[i].round, this.getAddress(data, sensor), values[i].displayunit, values[i].highAlertThreshold, values[i].lowAlertThreshold, sensval, values[i].useValue];
+					var sensordata = [stateval,
+						this.getUnit(data, sensor),
+						icons,
+						replace,
+						values[i].name,
+						defunit,
+						showdate,
+						showtime,
+						this.getLastupd(data, sensor),
+						this.getPicture(data, sensor),
+						values[i].displayvalue,
+						values[i].divider,
+						values[i].multiplier,
+						values[i].round,
+						this.getAddress(data, sensor),
+						values[i].displayunit,
+						values[i].highAlertThreshold,
+						values[i].lowAlertThreshold,
+						sensval,
+						values[i].useValue,
+						this.getAttribute(data, sensor, values[i].attribute),
+						];
 					// For debugging
 					//console.log(sensordata);
 					if (stateval) {
@@ -241,7 +262,7 @@ Module.register("MMM-homeassistant-sensors", {
 		return null;
 	},
 
-	// Collect the picture from the entity.	
+	// Collect the picture from the entity.
 	getPicture: function (data, value) {
 		for (var i = 0; i < data.length; i++) {
 			if (data[i].entity_id == value) {
@@ -251,10 +272,21 @@ Module.register("MMM-homeassistant-sensors", {
 		return null;
 	},
 
+	// Collect selected attribute from the entity.
+	getAttribute: function (data, value, attribute) {
+		for (var i = 0; i < data.length; i++) {
+			if (data[i].entity_id == value) {
+				return data[i].attributes[attribute];
+			}
+		}
+		return null;
+	},
+
+
 	// Adding alla the sensors to the table.
 	addValue: function (name, sensordata) {
 		// The array looks like this.
-	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue
+	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue, [20]attribute (may NOT be an array (yet))
 		var newrow,
 		newText,
 		newCell;
@@ -266,6 +298,18 @@ Module.register("MMM-homeassistant-sensors", {
 		var address;
 		var addblinkhigh = 0;
 		var addblinklow = 0;
+		// Check if the attribute is set, if it's a string, replace the current state with the attribute value.
+		if (typeof sensordata[20] !== 'undefined') {
+			if (sensordata[20].length > 1) {
+				//for (var i = 0; i < sensordata[20].length; i++) {
+				//	console.log(sensordata[20][i]);
+				//}
+				sensordata[0] = "Attribute is an array...";
+			} else {
+				sensordata[0] = sensordata[20];
+			}
+		}
+		//console.log(sensordata[20]);
 		newrow = document.createElement("tr");
 
 		// Fix the time and date.
