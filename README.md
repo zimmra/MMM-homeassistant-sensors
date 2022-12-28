@@ -91,7 +91,7 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `displayunit`        | `boolean` | Set to false to not display the unit in the unit column. |
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.|
 | `attribute`          | `string` | You can specify a specific attribute from the sensor that will be displayed instead of the state (attribute can NOT contain a multidimensional array).|
-| `valueSeparator`     | `string` | If your `attribute` is an array, you can specify what to separate the values with here (default is `|`).|
+| `valueSeparator`     | `string` | If your `attribute` is an array, you can specify what to separate the values with here (default is \| (pipe)).|
 | `highAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is higher then this the row will blink and turn red.|
 | `lowAlertThreshold`  | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
 | `icons`              | `[array{}]` | Define specific icons for specific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
