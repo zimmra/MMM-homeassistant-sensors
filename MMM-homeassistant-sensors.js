@@ -26,10 +26,12 @@ Module.register("MMM-homeassistant-sensors", {
 		values: []
 	},
 
-	// Load the momet script (from MM).
+	// Load the moment script (from MM) and chart.js from the module.
 	getScripts: function () {
 		return ["moment.js"];
-	},	
+		// Use this when Chart.js is needed (and installed via npm). 
+		//return ["moment.js", this.file('node_modules/chart.js/dist/chart.js')];
+	},
 
 	// Load the css script from the module.
 	getStyles: function () {
@@ -141,6 +143,18 @@ Module.register("MMM-homeassistant-sensors", {
 						showtime = false;
 					}
 
+					// Check if the valueSeparator is defined (overriding the default).
+					if (typeof values[i].valueSeparator === "undefined") {
+						values[i].valueSeparator = "|";
+					}
+
+					// Check if the graph parameter is set (to create a graph of the array in an attribute). 
+					if (typeof values[i].graph === "undefined") {
+						var graph = false;
+					} else {
+						var graph = true;
+					}
+
 					// Pulling all entity values.
 					// The Sensor
 					var sensor = values[i].sensor;
@@ -151,7 +165,8 @@ Module.register("MMM-homeassistant-sensors", {
 					// Value of the Sensor
 					var sensval = this.getValue(data, sensor);
 					// Make the data array.
-					var sensordata = [stateval,
+					var sensordata = [
+						stateval,
 						this.getUnit(data, sensor),
 						icons,
 						replace,
@@ -172,6 +187,8 @@ Module.register("MMM-homeassistant-sensors", {
 						sensval,
 						values[i].useValue,
 						this.getAttribute(data, sensor, values[i].attribute),
+						values[i].valueSeparator,
+						graph,
 						];
 					// For debugging
 					//console.log(sensordata);
@@ -282,15 +299,15 @@ Module.register("MMM-homeassistant-sensors", {
 		return null;
 	},
 
-
 	// Adding alla the sensors to the table.
 	addValue: function (name, sensordata) {
-		// The array looks like this.
-	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue, [20]attribute (may NOT be an array (yet))
+	// The array looks like this.
+	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue, [20]attribute (may NOT be a multi dimensional array (yet)), [21]valueSeparator, [22]graph,
 		var newrow,
 		newText,
 		newCell;
 		var newValue;
+		var newValueArray = "|";
 		var datedata;
 		var timedata;
 		var unit;
@@ -298,18 +315,7 @@ Module.register("MMM-homeassistant-sensors", {
 		var address;
 		var addblinkhigh = 0;
 		var addblinklow = 0;
-		// Check if the attribute is set, if it's a string, replace the current state with the attribute value.
-		if (typeof sensordata[20] !== 'undefined') {
-			if (sensordata[20].length > 1) {
-				//for (var i = 0; i < sensordata[20].length; i++) {
-				//	console.log(sensordata[20][i]);
-				//}
-				sensordata[0] = "Attribute is an array...";
-			} else {
-				sensordata[0] = sensordata[20];
-			}
-		}
-		//console.log(sensordata[20]);
+
 		newrow = document.createElement("tr");
 
 		// Fix the time and date.
@@ -408,9 +414,9 @@ Module.register("MMM-homeassistant-sensors", {
 				var iconsinline = "none";
 				//Change icons based on HA status
 				for (var key in sensordata[2]) {
-					
+
 					// Sets the icon defined in the config specified value will give specified icon.
-				    if (sensordata[0] === key) {
+					if (sensordata[0] === key) {
 						if (!sensordata[2][key].includes("/")) {
 							newCell.className = "ha-icon";
 							iconsinline = document.createElement("i");
@@ -459,11 +465,29 @@ Module.register("MMM-homeassistant-sensors", {
 			}
 		}
 
+		// Set the value to the sensors status
+		newValue = sensordata[0];
+
+		// Add all array values from the attribute to one value (divided by a defined separator (default=|)).
+		if (typeof sensordata[20] !== "undefined") {
+			if (sensordata[20].length > 1) {
+				newValue = sensordata[21];
+				for (var i = 0; i < sensordata[20].length; i++) {
+					newValue = newValue + sensordata[20][i] + sensordata[21];
+				}
+				if (sensordata[22] === true) {
+					// Figure out how to make a graph using the chart.js script with an attribute array...
+					console.log("Fix a graph here!");
+				}
+			} else {
+				newValue = sensordata[20];
+			}
+		}
+		//console.log(newValue);
+
 		// Replace the "state" with the "value" if set to true in config.
 		if (sensordata[19]) {
 			newValue = sensordata[18];
-		} else {
-			newValue = sensordata[0];
 		}
 
 		// Replace the "value" with something defined in config.
@@ -472,7 +496,7 @@ Module.register("MMM-homeassistant-sensors", {
 				newValue = sensordata[3][key];
 			}
 		}
-		
+
 		// Calculate the divider
 		if (sensordata[11]) {
 			newValue = newValue / sensordata[11];
@@ -482,7 +506,7 @@ Module.register("MMM-homeassistant-sensors", {
 		if (sensordata[12]) {
 			newValue = newValue * sensordata[12];
 		}
-		
+
 		// Round the value to two decimals.
 		// Todo: Add a better function for this...
 		if (sensordata[13]) {
@@ -493,7 +517,7 @@ Module.register("MMM-homeassistant-sensors", {
 		if (sensordata[5] !== "none") {
 			unit = unit.replace("%v%", newValue);
 		}
-		
+
 		// Change the value to the address if %a% defined as a value replacement array.
 		if (typeof newValue === 'string') {
 			if (newValue.includes("%a%")) {
@@ -505,7 +529,7 @@ Module.register("MMM-homeassistant-sensors", {
 		if (sensordata[4]) {
 			name = name.replace("%v%", newValue);
 		}
-		
+
 		// Removes the value if selected.
 		if (sensordata[10] === false) {
 			newValue = "";
@@ -567,12 +591,12 @@ Module.register("MMM-homeassistant-sensors", {
 			self.getStats();
 		}, nextLoad);
 	},
-	
+
 	// Added "this.identifier" to identify what instance of the module that sent update request.
 	getStats: function () {
 		this.sendSocketNotification('GET_STATS', { id: this.identifier, config: this.config });
 	},
-	
+
 	// Added "this.identifier" to be able to receive updates from "this" instance of the module only.
 	socketNotificationReceived: function (notification, payload) {
 		if (notification === "STATS_RESULT" && this.identifier == payload.id) {
