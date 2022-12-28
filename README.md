@@ -1,5 +1,5 @@
-> The NPM module "Request" was removed with Magicmirror `v2.16` This has
-> led to the fact that Magicmirror can no longer be started under
+> The NPM module "Request" was removed with MagicMirror `v2.16` This has
+> led to the fact that MagicMirror can no longer be started under
 > Docker, for example. With this fork, the deprecated npm module
 > "Request" is installed locally in the module's directory.
 
@@ -17,8 +17,8 @@ Using many of the features:
 
 - Adding the "value" to the name.
 - Adding time to the name column.
-- Hiding the unit it from the "unit" collumn.
-- Hiding the value in from the "value" collumn.
+- Hiding the unit it from the "unit" column.
+- Hiding the value in from the "value" column.
 - Using "pictures" from the entity.
 - Using different "pictures" for different values.
 - Using different "icons" for different values from the Material Design Font.
@@ -45,19 +45,14 @@ Enter the folder:
 cd MMM-homeassistant-sensors
 ````
 
-Install Node-Modules (The [MaterialDesignIcons](https://materialdesignicons.com/) webfont icon names can be used.).
+Install dependencies. 
 ````
-npm init
+npm install
 ````
-&
-````
-npm install request
-````
-
 
 
 ## Configuration
-The configuration can be very simpel, from just displaying a simple value from a senor, to parsing the sensorvalue and changeing it to different pictures depending on the value. It's all up to you.
+The configuration can be very simpel, from just displaying a simple value from a senor, to parsing the sensorvalue and changing it to different pictures depending on the value. It's all up to you.
 
 ## Configuration Options
 | Option               | Default | Description |
@@ -69,10 +64,10 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `port`               | `8321` | Port of homeassistant e.g. 443 for SSL.|
 | `https`              | `REQUIRED false` | Is SSL enabled on home assistant (true/false)|
 | `token`              | `REQUIRED` | The long lived token.|
-| `fade`               | `100` | When updating the values, this is the time (in milliswconds) the "table" fades out and in again.|
+| `fade`               | `100` | When updating the values, this is the time (in milliseconds) the "table" fades out and in again.|
 | `updateInterval`     | `300000` | The time between updates (in milliseconds) (300000 = 5 minutes).|
 | `controlsensor`      | `sensor control disabled` | The HA sensor you want to use to trigger to show the module when the defined value is present.|
-| `controlsensorvalue` | `sensor control disabled` | The value the above HA sensor must have to show the module. A boolean here is a good way to show and hide the module.|
+| `controlsensorvalue` | `sensor control disabled` | The value the above HA sensor must have to show the module. A Boolean here is a good way to show and hide the module.|
 | `displaySymbol`      | `true` | If you don't want either "icons" nor "pictures" in your list, set it to false.|
 | `displaydates`       | `false` | If you want to show dates for last update by default. This can be turned off or on for each sensor as well.|
 | `displaytimes`       | `false` | If you want to show times for last update by default. This can be turned off or on for each sensor as well.|
@@ -87,25 +82,27 @@ The configuration can be very simpel, from just displaying a simple value from a
 | -------------------- | ---- | ----------- |
 | `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor.|
 | `name`               | `string` | You can specify a name that will be displayed instead of the one from HA.|
-| `devider`            | `number` | You can specify a number (or calculation) that the value should be devided by.|
+| `divider`            | `number` | You can specify a number (or calculation) that the value should be divided by.|
 | `multiplier`         | `number` | You can specify a number (or calculation) that value should be multiplied by.|
 | `round`              | `boolean` | true or false if you want to round the value to max two decimals.|
-| `displayvalue`       | `boolean` | Set to false to not display the state in the value collumn. |
-| `displayvalue`       | `boolean` | Set to false to not display the state in the value collumn. |
+| `displayvalue`       | `boolean` | Set to false to not display the state in the value column. |
+| `displayvalue`       | `boolean` | Set to false to not display the state in the value column. |
 | `useValue`           | `false`   | Set this to true to use the sensor value instead of the sensor state|
-| `displayunit`        | `boolean` | Set to false to not display the unit in the unit collumn. |
+| `displayunit`        | `boolean` | Set to false to not display the unit in the unit column. |
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.|
+| `attribute`          | `string` | You can specify a specific attribute from the sensor that will be displayed instead of the state (attribute can NOT contain a multidimensional array).|
+| `valueSeparator`     | `string` | If your `attribute` is an array, you can specify what to separate the values with here (default is \| (pipe)).|
 | `highAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is higher then this the row will blink and turn red.|
-| `lowAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
-| `icons`              | `[array{}]` | Define specific icons for spesific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
-| `replace`            | `[array{}]` | Define specific values/states that will be owerriden by the specified values.|
+| `lowAlertThreshold`  | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
+| `icons`              | `[array{}]` | Define specific icons for specific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
+| `replace`            | `[array{}]` | Define specific values/states that will be overridden by the specified values.|
 
 ### Template options
 - Possibility to use %v% in the name and/or unit strings to get the "state" string from the sensor.
 - Possibility to use %u% in the name strings to get the "unit" string from the sensor.
 - Possibility to use %d% in the name and/or unit strings to get the "last update date" string from the sensor.
 - Possibility to use %t% in the name and/or unit strings to get the "last update time" string from the sensor.
-- Possibility to use %r% in the name and/or unit strings to get the "last update time" as a readble ("4 hours ago") string from the sensor.
+- Possibility to use %r% in the name and/or unit strings to get the "last update time" as a readable ("4 hours ago") string from the sensor.
 - Possibility to use %m% in the name and/or unit strings to get the "last update time" as a moments string (instead of a the HA string) from the sensor.
 - Possibility to use %a% in the name and/or unit and/or replacement value array to get a sensors "address" property. If you use google location sharing you can get the current address of a "device".
 
@@ -149,7 +146,7 @@ The configuration can be very simpel, from just displaying a simple value from a
 - Picture changes depending on status (on/off).
 - Values are replaced (on/off) to (in/out).
 - Adding values and time to the "names" using the "templates" %v% and %t%.
-- Hiding the value from the "value" collumn.
+- Hiding the value from the "value" column.
 ```
 {
 	module: 'MMM-homeassistant-sensors',
