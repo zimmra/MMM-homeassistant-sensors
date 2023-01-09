@@ -1,5 +1,5 @@
-> The NPM module "Request" was removed with Magicmirror `v2.16` This has
-> led to the fact that Magicmirror can no longer be started under
+> The NPM module "Request" was removed with MagicMirror `v2.16` This has
+> led to the fact that MagicMirror can no longer be started under
 > Docker, for example. With this fork, the deprecated npm module
 > "Request" is installed locally in the module's directory.
 
@@ -37,7 +37,9 @@ cd ~/MagicMirror/modules
 
 Clone this repository:
 ````
-git clone https://github.com/Fifteen15Studios/MMM-homeassistant-sensors.git
+
+git clone https://github.com/Snille/MMM-homeassistant-sensors.git
+
 ````
 
 Enter the folder:
@@ -45,15 +47,10 @@ Enter the folder:
 cd MMM-homeassistant-sensors
 ````
 
-Install Node-Modules (The [MaterialDesignIcons](https://materialdesignicons.com/) webfont icon names can be used.).
+Install dependencies. 
 ````
-npm init
+npm install
 ````
-&
-````
-npm install request
-````
-
 
 
 ## Configuration
@@ -69,7 +66,7 @@ The configuration can be very simple, from just displaying a simple value from a
 | `port`               | No | `8321` | Port of homeassistant e.g. 443 for SSL.|
 | `https`              | Yes | `false` | Is SSL enabled on home assistant (true/false)|
 | `token`              | Yes | `''` | The long lived token.|
-| `fade`               | No | `100` | When updating the values, this is the time (in milliswconds) the "table" fades out and in again.|
+| `fade`               | No | `100` | When updating the values, this is the time (in milliseconds) the "table" fades out and in again.|
 | `updateInterval`     | No | `300000` | The time between updates (in milliseconds) (300000 = 5 minutes).|
 | `controlsensor`      | No | `'sensor control disabled'` | The HA sensor you want to use to trigger to show the module when the defined value is present.|
 | `controlsensorvalue` | No | `'sensor control disabled'` | The value the above HA sensor must have to show the module. A boolean here is a good way to show and hide the module.|
@@ -95,8 +92,10 @@ The configuration can be very simple, from just displaying a simple value from a
 | `round`              | `boolean` | true or false if you want to round the value to max two decimals.|
 | `displayvalue`       | `boolean` | Set to false to not display the state in the value column. |
 | `useValue`           | `false`   | Set this to true to use the sensor value instead of the sensor state|
-| `displayunit`        | `boolean` | Set to false to not display the unit in the unit collumn. |
+| `displayunit`        | `boolean` | Set to false to not display the unit in the unit column. |
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.|
+| `attribute`          | `string` | You can specify a specific attribute from the sensor that will be displayed instead of the state (attribute can NOT contain a multidimensional array).|
+| `valueSeparator`     | `string` | If your `attribute` is an array, you can specify what to separate the values with here (default is \| (pipe)).|
 | `highAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is higher then this the row will blink and turn red.|
 | `lowAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
 | `icons`              | `array` | Define specific icons for spesific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
@@ -115,7 +114,7 @@ The configuration can be very simple, from just displaying a simple value from a
 - Possibility to use %u% in the name strings to get the "unit" string from the sensor.
 - Possibility to use %d% in the name and/or unit strings to get the "last update date" string from the sensor.
 - Possibility to use %t% in the name and/or unit strings to get the "last update time" string from the sensor.
-- Possibility to use %r% in the name and/or unit strings to get the "last update time" as a readble ("4 hours ago") string from the sensor.
+- Possibility to use %r% in the name and/or unit strings to get the "last update time" as a readable ("4 hours ago") string from the sensor.
 - Possibility to use %m% in the name and/or unit strings to get the "last update time" as a moments string (instead of a the HA string) from the sensor.
 - Possibility to use %a% in the name and/or unit and/or replacement value array to get a sensors "address" property. If you use google location sharing you can get the current address of a "device".
 
@@ -159,7 +158,7 @@ The configuration can be very simple, from just displaying a simple value from a
 - Picture changes depending on status (on/off).
 - Values are replaced (on/off) to (in/out).
 - Adding values and time to the "names" using the "templates" %v% and %t%.
-- Hiding the value from the "value" collumn.
+- Hiding the value from the "value" column.
 ```
 {
 	module: 'MMM-homeassistant-sensors',
