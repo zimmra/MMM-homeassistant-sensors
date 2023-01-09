@@ -37,9 +37,7 @@ cd ~/MagicMirror/modules
 
 Clone this repository:
 ````
-
 git clone https://github.com/Snille/MMM-homeassistant-sensors.git
-
 ````
 
 Enter the folder:
@@ -82,7 +80,7 @@ The configuration can be very simple, from just displaying a simple value from a
 | `noaddress`	       | No | `'away'` | If address field is "undefined" or "null" on the sensor, this string will be displayed instead of the address. |
 | `values`             | No | `[]` | Specify specific values from the json feed to only show what you need (entity_id). <br><br> Check the options!|
 
-## values options
+## Values options
 | Option               | Type | Description |
 | -------------------- | ---- | ----------- |
 | `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor.|
@@ -102,7 +100,7 @@ The configuration can be very simple, from just displaying a simple value from a
 | `replace`            | `array` | Define specific values/states that will be owerriden by the specified values.|
 | `notificationName`    | `string` | Name of the notification to send from this notification. Example: "Home" |
 
-## notificationConditions options
+## NotificationConditions options
 | Option               | Required | Type | Description |
 | -------------------- | -------- | ---- | ----------- |
 | `stateVals` 		| Yes | `array` | What values the notification should trigger on |
