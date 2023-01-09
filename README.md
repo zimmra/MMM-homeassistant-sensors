@@ -37,7 +37,9 @@ cd ~/MagicMirror/modules
 
 Clone this repository:
 ````
+
 git clone https://github.com/Snille/MMM-homeassistant-sensors.git
+
 ````
 
 Enter the folder:
@@ -52,32 +54,35 @@ npm install
 
 
 ## Configuration
-The configuration can be very simpel, from just displaying a simple value from a senor, to parsing the sensorvalue and changing it to different pictures depending on the value. It's all up to you.
+The configuration can be very simple, from just displaying a simple value from a senor, to parsing the sensorvalue and changing it to different pictures depending on the value. It's all up to you.
 
 ## Configuration Options
-| Option               | Default | Description |
-| -------------------- | ------- | ----------- |
-| `prettyName`         | `true` | Pretty print the name of each JSON key (remove camelCase and underscores).|
-| `stripName`          | `true` | Removes all keys before the printed key. <br><br>**Example:** `a.b.c` will print `c`.|
-| `title`              | Home Assistant | Title to display at the top of the module. <br>|
-| `host`               | `REQUIRED hassio.local` | The hostname or ip adress of the home assistant instance.|
-| `port`               | `8321` | Port of homeassistant e.g. 443 for SSL.|
-| `https`              | `REQUIRED false` | Is SSL enabled on home assistant (true/false)|
-| `token`              | `REQUIRED` | The long lived token.|
-| `fade`               | `100` | When updating the values, this is the time (in milliseconds) the "table" fades out and in again.|
-| `updateInterval`     | `300000` | The time between updates (in milliseconds) (300000 = 5 minutes).|
-| `controlsensor`      | `sensor control disabled` | The HA sensor you want to use to trigger to show the module when the defined value is present.|
-| `controlsensorvalue` | `sensor control disabled` | The value the above HA sensor must have to show the module. A Boolean here is a good way to show and hide the module.|
-| `displaySymbol`      | `true` | If you don't want either "icons" nor "pictures" in your list, set it to false.|
-| `displaydates`       | `false` | If you want to show dates for last update by default. This can be turned off or on for each sensor as well.|
-| `displaytimes`       | `false` | If you want to show times for last update by default. This can be turned off or on for each sensor as well.|
-| `dateformat`       | `YYYY-MM-DD` | See [moments](https://momentjs.com/docs/#/displaying/) for more date format options.|
-| `timeformat`       | `HH:mm:ss` | See [moments](https://momentjs.com/docs/#/displaying/) for more time format options.|
-| `rowClass`       | `normal` | Changing the font size, Possible values: `'small'`, `'normal'`, `'big'` <br> Default value: `'small'` |
-| `debuglogging`       | `false` | Enable logging into /home/pi/.pm2/logs/mm-error.log (true/false).|
-| `values`             | `[array{}]` | Specify specific values from the json feed to only show what you need (entity_id). <br><br> Check the options!|
+| Option               | Required | Default | Description |
+| -------------------- | ------- | ------- | ----------- |
+| `prettyName`         | No | `true` | Pretty print the name of each JSON key (remove camelCase and underscores).|
+| `stripName`          | No | `true` | Removes all keys before the printed key. <br><br>**Example:** `a.b.c` will print `c`.|
+| `title`              | No | `'Home Assistant'` | Title to display at the top of the module. <br>|
+| `host`               | Yes |  `'hassio.local'` | The hostname or ip adress of the home assistant instance.|
+| `port`               | No | `8321` | Port of homeassistant e.g. 443 for SSL.|
+| `https`              | Yes | `false` | Is SSL enabled on home assistant (true/false)|
+| `token`              | Yes | `''` | The long lived token.|
+| `fade`               | No | `100` | When updating the values, this is the time (in milliseconds) the "table" fades out and in again.|
+| `updateInterval`     | No | `300000` | The time between updates (in milliseconds) (300000 = 5 minutes).|
+| `controlsensor`      | No | `'sensor control disabled'` | The HA sensor you want to use to trigger to show the module when the defined value is present.|
+| `controlsensorvalue` | No | `'sensor control disabled'` | The value the above HA sensor must have to show the module. A boolean here is a good way to show and hide the module.|
+| `displaySymbol`      | No | `true` | If you don't want either "icons" nor "pictures" in your list, set it to false.|
+| `displaydates`       | No | `false` | If you want to show dates for last update by default. This can be turned off or on for each sensor as well.|
+| `displaytimes`       | No | `false` | If you want to show times for last update by default. This can be turned off or on for each sensor as well.|
+| `notificationOnly`   | No | `false` | Don't show any sensors, just send a notification based on notificationConditions.|
+| `notificationConditions` | No | `[]` | See section below for details. This is required to send a notification. |
+| `dateformat`         | No | `'YYYY-MM-DD'` | See [moments](https://momentjs.com/docs/#/displaying/) for more date format options.|
+| `timeformat`         | No | `'HH:mm:ss'` | See [moments](https://momentjs.com/docs/#/displaying/) for more time format options.|
+| `rowClass`           | No | `'small'` | Changing the font size, Possible values: `'small'`, `'normal'`, `'big'` <br> Default value: `'small'` |
+| `debuglogging`       | No | `false` | Enable logging into /home/pi/.pm2/logs/mm-error.log (true/false).|
+| `noaddress`	       | No | `'away'` | If address field is "undefined" or "null" on the sensor, this string will be displayed instead of the address. |
+| `values`             | No | `[]` | Specify specific values from the json feed to only show what you need (entity_id). <br><br> Check the options!|
 
-## Sensor options
+## values options
 | Option               | Type | Description |
 | -------------------- | ---- | ----------- |
 | `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor.|
@@ -86,16 +91,23 @@ The configuration can be very simpel, from just displaying a simple value from a
 | `multiplier`         | `number` | You can specify a number (or calculation) that value should be multiplied by.|
 | `round`              | `boolean` | true or false if you want to round the value to max two decimals.|
 | `displayvalue`       | `boolean` | Set to false to not display the state in the value column. |
-| `displayvalue`       | `boolean` | Set to false to not display the state in the value column. |
 | `useValue`           | `false`   | Set this to true to use the sensor value instead of the sensor state|
 | `displayunit`        | `boolean` | Set to false to not display the unit in the unit column. |
 | `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.|
 | `attribute`          | `string` | You can specify a specific attribute from the sensor that will be displayed instead of the state (attribute can NOT contain a multidimensional array).|
 | `valueSeparator`     | `string` | If your `attribute` is an array, you can specify what to separate the values with here (default is \| (pipe)).|
 | `highAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is higher then this the row will blink and turn red.|
-| `lowAlertThreshold`  | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
-| `icons`              | `[array{}]` | Define specific icons for specific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
-| `replace`            | `[array{}]` | Define specific values/states that will be overridden by the specified values.|
+| `lowAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
+| `icons`              | `array` | Define specific icons for spesific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
+| `replace`            | `array` | Define specific values/states that will be owerriden by the specified values.|
+| `notificationName`    | `string` | Name of the notification to send from this notification. Example: "Home" |
+
+## notificationConditions options
+| Option               | Required | Type | Description |
+| -------------------- | -------- | ---- | ----------- |
+| `stateVals` 		| Yes | `array` | What values the notification should trigger on |
+| `notificationVal` 	| Yes | `Any` | The value of the notification when trigger is met |
+| `notificationValNeg` 	| No | `Any` | The value of the notification when trigger is not met (optional) |
 
 ### Template options
 - Possibility to use %v% in the name and/or unit strings to get the "state" string from the sensor.
@@ -252,6 +264,38 @@ Added the following to my `custom.css` file.
 
 ### Result 
 ![Simple+icons](.github/screen04-simple+icons.png)
+
+### Notification Example
+```
+{
+	module: 'MMM-homeassistant-sensors',
+	position: 'top_left',
+	config: {
+	    host: "IP TO HOME ASSISTANT",
+	    port: "8123",
+	    https: false,
+	    token: "YOUR OWN",
+        // Only sends the notification, does not show any information
+        notificationOnly: true,
+        updateInterval: 15 * 1000, // 15 seconds
+        values: [
+        {
+	        sensor: "sensor.pixel_6a_wifi_connection",
+	        notificationName: "HOME",
+            // Will send a notification titled "HOME", with value true, when the pixel phone connects to a wifi named "MyWifi" or "MyWifi5G"
+            // Will send a notification titled "HOME", with value false, when the pixel phone is not connected to these wifi networks.
+	        notificationConditions: [
+	            {
+		        stateVals: ["MyWifi", "MyWifi5G"],
+		        notificationVal: true,
+		        notificationValNeg: false
+	            },
+	        ]
+        },
+        ]
+    }
+},
+```
 
 ### Here is the advanced configuration
 
