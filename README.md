@@ -66,6 +66,7 @@ The configuration can be very simple, from just displaying a simple value from a
 | `token`              | Yes | `''` | The long lived token.|
 | `fade`               | No | `100` | When updating the values, this is the time (in milliseconds) the "table" fades out and in again.|
 | `updateInterval`     | No | `300000` | The time between updates (in milliseconds) (300000 = 5 minutes).|
+| `id`                 | No | `false` | If you want to refresh the values on this specific instance from HA via notifications, send "REFRESHVALUESX" (X = your id). If you send just "REFRESHVALUES" all instances values will be refreshed.|
 | `controlsensor`      | No | `'sensor control disabled'` | The HA sensor you want to use to trigger to show the module when the defined value is present.|
 | `controlsensorvalue` | No | `'sensor control disabled'` | The value the above HA sensor must have to show the module. A boolean here is a good way to show and hide the module.|
 | `displaySymbol`      | No | `true` | If you don't want either "icons" nor "pictures" in your list, set it to false.|

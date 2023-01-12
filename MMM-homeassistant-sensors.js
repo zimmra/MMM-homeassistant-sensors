@@ -13,6 +13,7 @@ Module.register("MMM-homeassistant-sensors", {
 		apipassword: '',
 		fade: 100,
 		updateInterval: 300000,
+		id: false,
 		displaySymbol: true,
 		displaydates: false,
 		displaytimes: false,
@@ -38,6 +39,20 @@ Module.register("MMM-homeassistant-sensors", {
 	// Load the css script from the module.
 	getStyles: function () {
 		return ["modules/MMM-homeassistant-sensors/node_modules/@mdi/font/css/materialdesignicons.min.css", "MMM-homeassistant-sensors.css"];
+	},
+
+	// Refresh the data from HA if the notification "REFRESHVALUES(x)" arrives.
+	notificationReceived: function (notification, payload, sender) {
+		var self = this;
+		if (self.config.id !== false ) {
+			if (notification === "REFRESHVALUES" + self.config.id) {
+				this.getStats();
+			} 
+		} else {
+			if (notification === "REFRESHVALUES") {
+				this.getStats();
+			}
+		}
 	},
 
 	start: function () {
@@ -433,7 +448,6 @@ Module.register("MMM-homeassistant-sensors", {
 			unit = "";
 		}
 
-
 		// Column start point. 
 		var column = -1;
 
@@ -512,6 +526,7 @@ Module.register("MMM-homeassistant-sensors", {
 
 		// Set the value to the sensors status
 		newValue = sensordata[0];
+		//console.log(newValue);
 
 		// Add all array values from the attribute to one value (divided by a defined separator (default=|)).
 		if (typeof sensordata[20] !== "undefined") {
@@ -528,7 +543,6 @@ Module.register("MMM-homeassistant-sensors", {
 				newValue = sensordata[20];
 			}
 		}
-		//console.log(newValue);
 
 		// Replace the "state" with the "value" if set to true in config.
 		if (sensordata[19]) {
@@ -536,9 +550,11 @@ Module.register("MMM-homeassistant-sensors", {
 		}
 
 		// Replace the "value" with something defined in config.
-		for (var key in sensordata[3]) {
-			if (sensordata[0] === key) {
-				newValue = sensordata[3][key];
+		if (sensordata[3] !== "none") {
+			for (var key in sensordata[3]) {
+				if (sensordata[0] === key) {
+					newValue = sensordata[3][key];
+				}
 			}
 		}
 
