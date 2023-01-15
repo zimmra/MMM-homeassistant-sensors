@@ -104,10 +104,10 @@ The configuration can be very simple, from just displaying a simple value from a
 ## NotificationConditions options
 | Option               | Required | Type | Description |
 | -------------------- | -------- | ---- | ----------- |
-| `stateVals` 		| Yes | `array` | What values the notification should trigger on |
-| `negState`  | `boolean` | True if you want the state to be negated. As in, looking for NOT stateVals. Default `false` |
-| `notificationVal` 	| Yes | `Any` | The value of the notification when trigger is met |
-| `notificationValNeg` 	| No | `Any` | The value of the notification when trigger is not met (optional) |
+| `stateVals` 	       | Yes | `array` | What values the notification should trigger on |
+| `negState`           | No  | `boolean` | True if you want the state to be negated. As in, looking for NOT stateVals. Default `false` |
+| `notificationVal`    | Yes | `Any` | The value of the notification when trigger is met |
+| `notificationValNeg` | No  | `Any` | The value of the notification when trigger is not met (optional) |
 
 ### Template options
 - Possibility to use %v% in the name and/or unit strings to get the "state" string from the sensor.
