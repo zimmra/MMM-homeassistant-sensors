@@ -224,23 +224,47 @@ Module.register("MMM-homeassistant-sensors", {
 						var notificationValue = undefined;
 						var origValue = values[i].notificationState;
 
-						console.log("MMM-homeassistant-sensors - stateval: " + stateval);
-						var found = false;
+						if(debuglogging) {
+							console.log("MMM-homeassistant-sensors - stateval: " + stateval);
+						}
+
 						// Check conditions of sending notification
 						if(values[i].notificationConditions.length != 0) {
+							var found = false;
+
 							values[i].notificationConditions.forEach((condition) => {
+
+								var negState = false;
+
+								if(condition.negState === true) {
+									negState = true;
+								}
+
 								condition.stateVals.forEach((val) => {
-									console.log("MMM-homeassistant-sensors - vals: " + val);
+									if(debuglogging) {
+										console.log("MMM-homeassistant-sensors - vals: " + val);
+									}
+									// If sensor value matches the value we're looking for
 									if(stateval == val) {
-										console.log("MMM-homeassistant-sensors - " + val + " found");
-										notificationValue = condition.notificationVal;
+										if(debuglogging) {
+											console.log("MMM-homeassistant-sensors - " + val + " found");
+										}
 										found = true;
 									}
 								});
 
+								// If we found what we're looking for - or didn't find what we're NOT looking for
+								if((!found && negState) ||(found && !negState)) {
+									notificationValue = condition.notificationVal;
+								}
 								// Set negative value for notification if necessary
-								if(!found && condition.notificationValNeg !== undefined) {
-									console.log("MMM-homeassistant-sensors - vals not found");
+								else if(!found && !negState && condition.notificationValNeg !== undefined) {
+									if(debuglogging) {
+										console.log("MMM-homeassistant-sensors - vals not found");
+									}
+									notificationValue = condition.notificationValNeg;
+								}
+								else if(found && negState && condition.notificationValNeg !== undefined) {
 									notificationValue = condition.notificationValNeg;
 								}
 							});
