@@ -73,7 +73,6 @@ The configuration can be very simple, from just displaying a simple value from a
 | `displaydates`       | No | `false` | If you want to show dates for last update by default. This can be turned off or on for each sensor as well.|
 | `displaytimes`       | No | `false` | If you want to show times for last update by default. This can be turned off or on for each sensor as well.|
 | `notificationOnly`   | No | `false` | Don't show any sensors, just send a notification based on notificationConditions.|
-| `notificationConditions` | No | `[]` | See section below for details. This is required to send a notification. |
 | `dateformat`         | No | `'YYYY-MM-DD'` | See [moments](https://momentjs.com/docs/#/displaying/) for more date format options.|
 | `timeformat`         | No | `'HH:mm:ss'` | See [moments](https://momentjs.com/docs/#/displaying/) for more time format options.|
 | `rowClass`           | No | `'small'` | Changing the font size, Possible values: `'small'`, `'normal'`, `'big'` <br> Default value: `'small'` |
@@ -100,11 +99,13 @@ The configuration can be very simple, from just displaying a simple value from a
 | `icons`              | `array` | Define specific icons for spesific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
 | `replace`            | `array` | Define specific values/states that will be owerriden by the specified values.|
 | `notificationName`    | `string` | Name of the notification to send from this notification. Example: "Home" |
+| `notificationConditions` | `array` | See section below for details. This is required to send a notification. |
 
 ## NotificationConditions options
 | Option               | Required | Type | Description |
 | -------------------- | -------- | ---- | ----------- |
 | `stateVals` 		| Yes | `array` | What values the notification should trigger on |
+| `negState`  | `boolean` | True if you want the state to be negated. As in, looking for NOT stateVals. Default `false` |
 | `notificationVal` 	| Yes | `Any` | The value of the notification when trigger is met |
 | `notificationValNeg` 	| No | `Any` | The value of the notification when trigger is not met (optional) |
 
