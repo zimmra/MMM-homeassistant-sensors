@@ -224,7 +224,7 @@ Module.register("MMM-homeassistant-sensors", {
 						var notificationValue = undefined;
 						var origValue = values[i].notificationState;
 
-						if(debuglogging) {
+						if(this.debuglogging) {
 							console.log("MMM-homeassistant-sensors - stateval: " + stateval);
 						}
 
@@ -241,12 +241,12 @@ Module.register("MMM-homeassistant-sensors", {
 								}
 
 								condition.stateVals.forEach((val) => {
-									if(debuglogging) {
+									if(this.debuglogging) {
 										console.log("MMM-homeassistant-sensors - vals: " + val);
 									}
 									// If sensor value matches the value we're looking for
 									if(stateval == val) {
-										if(debuglogging) {
+										if(this.debuglogging) {
 											console.log("MMM-homeassistant-sensors - " + val + " found");
 										}
 										found = true;
@@ -259,7 +259,7 @@ Module.register("MMM-homeassistant-sensors", {
 								}
 								// Set negative value for notification if necessary
 								else if(!found && !negState && condition.notificationValNeg !== undefined) {
-									if(debuglogging) {
+									if(this.debuglogging) {
 										console.log("MMM-homeassistant-sensors - vals not found");
 									}
 									notificationValue = condition.notificationValNeg;
