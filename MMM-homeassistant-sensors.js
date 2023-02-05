@@ -568,6 +568,20 @@ Module.register("MMM-homeassistant-sensors", {
 			}
 		}
 
+		// If higher then alert threshold add blink high class.
+		if (!isNaN(sensordata[16])) {
+			if (newValue > sensordata[16]) {
+				addblinkhigh = 1;
+			} 
+		}
+
+		// If lower then alert threshold add blink low class.
+		if (!isNaN(sensordata[17])) {
+			if (newValue < sensordata[17]) {
+				addblinklow = 1;
+			} 
+		}
+
 		// Replace the "state" with the "value" if set to true in config.
 		if (sensordata[19]) {
 			newValue = sensordata[18];
@@ -619,21 +633,6 @@ Module.register("MMM-homeassistant-sensors", {
 		if (sensordata[10] === false) {
 			newValue = "";
 		}
-
-		// If higher then alert threshold add blink high class.
-		if (!isNaN(sensordata[16])) {
-			if (newValue > sensordata[16]) {
-				addblinkhigh = 1;
-			} 
-		}
-
-		// If lower then alert threshold add blink low class.
-		if (!isNaN(sensordata[17])) {
-			if (newValue < sensordata[17]) {
-				addblinklow = 1;
-			} 
-		}
-
 
 		// Name
 		column++;
