@@ -211,6 +211,8 @@ Module.register("MMM-homeassistant-sensors", {
 						values[i].useValue,
 						this.getAttribute(data, sensor, values[i].attribute),
 						values[i].valueSeparator,
+						values[i].highDisplayThreshold,
+						values[i].lowDisplayThreshold,
 						graph,
 						];
 					// For debugging
@@ -385,7 +387,7 @@ Module.register("MMM-homeassistant-sensors", {
 	// Adding alla the sensors to the table.
 	addValue: function (name, sensordata) {
 	// The array looks like this.
-	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue, [20]attribute (may NOT be a multi dimensional array (yet)), [21]valueSeparator, [22]graph,
+	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue, [20]attribute (may NOT be a multi dimensional array (yet)), [21]valueSeparator, [22].highDisplayThreshold, [23].lowDisplayThreshold,[24]graph,
 		var newrow,
 		newText,
 		newCell;
@@ -398,269 +400,300 @@ Module.register("MMM-homeassistant-sensors", {
 		var address;
 		var addblinkhigh = 0;
 		var addblinklow = 0;
-
-		newrow = document.createElement("tr");
-
-		// Fix the time and date.
-		var thetime = new Date(sensordata[8]);
-		var momentdate = moment(thetime);
-
-		// The time formatted. 
-		var timedata = moment(thetime).format(this.config.timeformat);
-
-		// The date formatted
-		var datedata = moment(thetime).format(this.config.dateformat);
-
-		// Format the time to human readable...
-		var rtime = momentdate.from(moment());
-
-		// Adds the address if available.
-		if (sensordata[14]) {
-			address = sensordata[14];
-		} else {
-			address = this.config.noaddress;
-		}
-
-		// Unit
-		if (sensordata[5] !== "none") {
-			unit = sensordata[5];
-			unit = unit.replace("%t%", timedata);
-			unit = unit.replace("%r%", rtime);
-			unit = unit.replace("%m%", momentdate);
-			unit = unit.replace("%d%", datedata);
-			unit = unit.replace("%a%", address);
-		} else {
-			unit = sensordata[1];
-		}
-
-		// Name
-		if (sensordata[4]) {
-			name = sensordata[4];
-			name = name.replace("%t%", timedata);
-			name = name.replace("%r%", rtime);
-			name = name.replace("%m%", momentdate);
-			name = name.replace("%d%", datedata);
-			name = name.replace("%a%", address);
-			name = name.replace("%u%", unit);
-		} else {
-			if (this.config.stripName) {
-				var split = name.split(".");
-				name = split[split.length - 1];
-			}
-			if (this.config.prettyName) {
-				name = name.replace(/([A-Z])/g, function ($1) {
-						return "_" + $1.toLowerCase();
-					});
-				name = name.split("_").join(" ");
-				name = name.replace(/\w\S*/g, function (txt) {
-						return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-					});
-			}
-		}
-		// removes the date from the output table if selected.
-		if (sensordata[6] === false) {
-			datedata = "";
-		}
-
-		// Removes the date from the output table if selected.
-		if (sensordata[7] === false) {
-			timedata = "";
-		}
-		
-		// Removes the unit if set not to be displayed.
-		if (sensordata[15] === false) {
-			unit = "";
-		}
-
-		// Column start point. 
-		var column = -1;
-
-		// Last Date Updated
-		column++;
-		newCell = newrow.insertCell(column);
-		newCell.className = "ha-date";
-		newText = document.createTextNode(datedata);
-		newCell.appendChild(newText);
-
-		// Last Time Updated
-		column++;
-		newCell = newrow.insertCell(column);
-		newCell.className = "ha-time";
-		newText = document.createTextNode(timedata);
-		newCell.appendChild(newText);
-
-		// icons
-		column++;
-		newCell = newrow.insertCell(column);
-		if (this.config.displaySymbol) {
-			if (typeof sensordata[2] === "object") {
-				var iconsinline = "none";
-				//Change icons based on HA status
-				for (var key in sensordata[2]) {
-
-					// Sets the icon defined in the config specified value will give specified icon.
-					if (sensordata[0] === key) {
-						if (!sensordata[2][key].includes("/")) {
-							newCell.className = "ha-icon";
-							iconsinline = document.createElement("i");
-							iconsinline.className = "mdi mdi-" + sensordata[2][key];
-							//break;
-						} else {
-							iconsinline = document.createElement("img");
-							iconsinline.src = sensordata[2][key];
-							iconsinline.className = "ha-img";
-						}
-					} 
-
-					// If no icon is set by values, the default one will be used.
-					if (iconsinline === "none") {
-						if (!sensordata[2][key].includes("/")) {
-							newCell.className = "ha-icon";
-							iconsinline = document.createElement("i");
-							iconsinline.className = "mdi mdi-" + sensordata[2][key];
-							//break;
-						} else {
-							iconsinline = document.createElement("img");
-							iconsinline.src = sensordata[2][key];
-							iconsinline.className = "ha-img";
-						}
-					}
-				}
-				newCell.appendChild(iconsinline);
-			} else {
-				// Setting the Picture if defined in the entity.
-				if (sensordata[9]) {
-					if (!sensordata[9].includes("http")) {
-						if (this.config.https) {
-							var picturestart = "https://";
-						} else {
-							var picturestart = "http://";
-						}
-						picture = picturestart.concat(this.config.host, ":", this.config.port, sensordata[9]);
-					} else {
-						picture = sensordata[9];
-					}
-					var iconsinline = document.createElement("img");
-					iconsinline.src = picture;
-					iconsinline.className = "ha-img";
-					newCell.appendChild(iconsinline);
-				}
-			}
-		}
+		var addsensor = 0;
+		var addhighsensor = 0;
+		var addlowsensor = 0;
 
 		// Set the value to the sensors status
 		newValue = sensordata[0];
-		//console.log(newValue);
+		// console.log(newValue);
 
-		// Add all array values from the attribute to one value (divided by a defined separator (default=|)).
-		if (typeof sensordata[20] !== "undefined") {
-			if (sensordata[20].length > 1) {
-				newValue = sensordata[21];
-				for (var i = 0; i < sensordata[20].length; i++) {
-					newValue = newValue + sensordata[20][i] + sensordata[21];
-				}
-				if (sensordata[22] === true) {
-					// Figure out how to make a graph using the chart.js script with an attribute array...
-					console.log("Fix a graph here!");
-				}
+		// If higher then display threshold add the sensor to the table.
+		if (!isNaN(sensordata[22])) {
+			if (newValue > sensordata[22]) {
+				addhighsensor = 1;
+			}
+		}
+
+		// If lower then display threshold add the sensor to the table.
+		if (!isNaN(sensordata[23])) {
+			if (newValue < sensordata[23]) {
+				addlowsensor = 1;
+			}
+		}
+
+		// If neither lower or higher display threshold is set add the sensor to the table.
+		if ((isNaN(sensordata[22])) && (isNaN(sensordata[23]))) {
+			addsensor = 1;
+		}
+
+		// Adds a row in the table. 
+		newrow = document.createElement("tr");
+
+		// Only add the sensor if any of these are set. 
+		if (addhighsensor == 1 || addlowsensor == 1 || addsensor == 1) {
+
+			// Fix the time and date.
+			var thetime = new Date(sensordata[8]);
+			var momentdate = moment(thetime);
+
+			// The time formatted. 
+			var timedata = moment(thetime).format(this.config.timeformat);
+
+			// The date formatted
+			var datedata = moment(thetime).format(this.config.dateformat);
+
+			// Format the time to human readable...
+			var rtime = momentdate.from(moment());
+
+			// Adds the address if available.
+			if (sensordata[14]) {
+				address = sensordata[14];
 			} else {
-				newValue = sensordata[20];
+				address = this.config.noaddress;
 			}
-		}
 
-		// If higher then alert threshold add blink high class.
-		if (!isNaN(sensordata[16])) {
-			if (newValue > sensordata[16]) {
-				addblinkhigh = 1;
-			} 
-		}
+			// Unit
+			if (sensordata[5] !== "none") {
+				unit = sensordata[5];
+				unit = unit.replace("%t%", timedata);
+				unit = unit.replace("%r%", rtime);
+				unit = unit.replace("%m%", momentdate);
+				unit = unit.replace("%d%", datedata);
+				unit = unit.replace("%a%", address);
+			} else {
+				unit = sensordata[1];
+			}
 
-		// If lower then alert threshold add blink low class.
-		if (!isNaN(sensordata[17])) {
-			if (newValue < sensordata[17]) {
-				addblinklow = 1;
-			} 
-		}
-
-		// Replace the "state" with the "value" if set to true in config.
-		if (sensordata[19]) {
-			newValue = sensordata[18];
-		}
-
-		// Replace the "value" with something defined in config.
-		if (sensordata[3] !== "none") {
-			for (var key in sensordata[3]) {
-				if (sensordata[0] === key) {
-					newValue = sensordata[3][key];
+			// Name
+			if (sensordata[4]) {
+				name = sensordata[4];
+				name = name.replace("%t%", timedata);
+				name = name.replace("%r%", rtime);
+				name = name.replace("%m%", momentdate);
+				name = name.replace("%d%", datedata);
+				name = name.replace("%a%", address);
+				name = name.replace("%u%", unit);
+			} else {
+				if (this.config.stripName) {
+					var split = name.split(".");
+					name = split[split.length - 1];
+				}
+				if (this.config.prettyName) {
+					name = name.replace(/([A-Z])/g, function ($1) {
+							return "_" + $1.toLowerCase();
+						});
+					name = name.split("_").join(" ");
+					name = name.replace(/\w\S*/g, function (txt) {
+							return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+						});
 				}
 			}
-		}
-
-		// Calculate the divider
-		if (sensordata[11]) {
-			newValue = newValue / sensordata[11];
-		}
-
-		// Calculate the multiplier 
-		if (sensordata[12]) {
-			newValue = newValue * sensordata[12];
-		}
-
-		// Round the value to two decimals.
-		// Todo: Add a better function for this...
-		if (sensordata[13]) {
-			newValue = Math.round(newValue * 100) / 100;
-		}
-
-		// If you want to add the value to the defined unit.
-		if (sensordata[5] !== "none") {
-			unit = unit.replace("%v%", newValue);
-		}
-
-		// Change the value to the address if %a% defined as a value replacement array.
-		if (typeof newValue === 'string') {
-			if (newValue.includes("%a%")) {
-				newValue = newValue.replace("%a%", address);
+			// removes the date from the output table if selected.
+			if (sensordata[6] === false) {
+				datedata = "";
 			}
+
+			// Removes the date from the output table if selected.
+			if (sensordata[7] === false) {
+				timedata = "";
+			}
+			
+			// Removes the unit if set not to be displayed.
+			if (sensordata[15] === false) {
+				unit = "";
+			}
+
+			// Column start point. 
+			var column = -1;
+
+			// Last Date Updated
+			column++;
+			newCell = newrow.insertCell(column);
+			newCell.className = "ha-date";
+			newText = document.createTextNode(datedata);
+			newCell.appendChild(newText);
+
+			// Last Time Updated
+			column++;
+			newCell = newrow.insertCell(column);
+			newCell.className = "ha-time";
+			newText = document.createTextNode(timedata);
+			newCell.appendChild(newText);
+
+			// icons
+			column++;
+			newCell = newrow.insertCell(column);
+			if (this.config.displaySymbol) {
+				if (typeof sensordata[2] === "object") {
+					var iconsinline = "none";
+					//Change icons based on HA status
+					for (var key in sensordata[2]) {
+
+						// Sets the icon defined in the config specified value will give specified icon.
+						if (sensordata[0] === key) {
+							if (!sensordata[2][key].includes("/")) {
+								newCell.className = "ha-icon";
+								iconsinline = document.createElement("i");
+								iconsinline.className = "mdi mdi-" + sensordata[2][key];
+								//break;
+							} else {
+								iconsinline = document.createElement("img");
+								iconsinline.src = sensordata[2][key];
+								iconsinline.className = "ha-img";
+							}
+						} 
+
+						// If no icon is set by values, the default one will be used.
+						if (iconsinline === "none") {
+							if (!sensordata[2][key].includes("/")) {
+								newCell.className = "ha-icon";
+								iconsinline = document.createElement("i");
+								iconsinline.className = "mdi mdi-" + sensordata[2][key];
+								//break;
+							} else {
+								iconsinline = document.createElement("img");
+								iconsinline.src = sensordata[2][key];
+								iconsinline.className = "ha-img";
+							}
+						}
+					}
+					newCell.appendChild(iconsinline);
+				} else {
+					// Setting the Picture if defined in the entity.
+					if (sensordata[9]) {
+						if (!sensordata[9].includes("http")) {
+							if (this.config.https) {
+								var picturestart = "https://";
+							} else {
+								var picturestart = "http://";
+							}
+							picture = picturestart.concat(this.config.host, ":", this.config.port, sensordata[9]);
+						} else {
+							picture = sensordata[9];
+						}
+						var iconsinline = document.createElement("img");
+						iconsinline.src = picture;
+						iconsinline.className = "ha-img";
+						newCell.appendChild(iconsinline);
+					}
+				}
+			}
+
+			// Add all array values from the attribute to one value (divided by a defined separator (default=|)).
+			if (typeof sensordata[20] !== "undefined") {
+				if (sensordata[20].length > 1) {
+					newValue = sensordata[21];
+					for (var i = 0; i < sensordata[20].length; i++) {
+						newValue = newValue + sensordata[20][i] + sensordata[21];
+					}
+					if (sensordata[24] === true) {
+						// Figure out how to make a graph using the chart.js script with an attribute array...
+						console.log("Fix a graph here!");
+					}
+				} else {
+					newValue = sensordata[20];
+				}
+			}
+
+			// If higher then alert threshold add blink high class.
+			if (!isNaN(sensordata[16])) {
+				if (newValue > sensordata[16]) {
+					addblinkhigh = 1;
+				} 
+			}
+
+			// If lower then alert threshold add blink low class.
+			if (!isNaN(sensordata[17])) {
+				if (newValue < sensordata[17]) {
+					addblinklow = 1;
+				} 
+			}
+
+			// Replace the "state" with the "value" if set to true in config.
+			if (sensordata[19]) {
+				newValue = sensordata[18];
+			}
+
+			// Replace the "value" with something defined in config.
+			if (sensordata[3] !== "none") {
+				for (var key in sensordata[3]) {
+					if (sensordata[0] === key) {
+						newValue = sensordata[3][key];
+					}
+				}
+			}
+
+			// Calculate the divider
+			if (sensordata[11]) {
+				newValue = newValue / sensordata[11];
+			}
+
+			// Calculate the multiplier 
+			if (sensordata[12]) {
+				newValue = newValue * sensordata[12];
+			}
+
+			// Round the value to two decimals.
+			// Todo: Add a better function for this...
+			if (sensordata[13]) {
+				newValue = Math.round(newValue * 100) / 100;
+			}
+
+			// If you want to add the value to the defined unit.
+			if (sensordata[5] !== "none") {
+				unit = unit.replace("%v%", newValue);
+			}
+
+			// Change the value to the address if %a% defined as a value replacement array.
+			if (typeof newValue === 'string') {
+				if (newValue.includes("%a%")) {
+					newValue = newValue.replace("%a%", address);
+				}
+			}
+
+			// If you want to add the value to the defined name.
+			if (sensordata[4]) {
+				name = name.replace("%v%", newValue);
+			}
+
+			// Removes the value if selected.
+			if (sensordata[10] === false) {
+				newValue = "";
+			}
+
+			// Name
+			column++;
+			newCell = newrow.insertCell(column);
+			newCell.className = "ha-name";
+			newText = document.createTextNode(name);
+			newCell.appendChild(newText);
+
+			// Value
+			column++;
+			newCell = newrow.insertCell(column);
+			newCell.className = "ha-value";
+			if (addblinkhigh > 0) {
+				newrow.className += "blinkhigh";
+			}
+			if (addblinklow > 0) {
+				newrow.className += "blinklow";
+			}
+			newText = document.createTextNode(newValue);
+			newCell.appendChild(newText);
+
+			// Unit
+			column++;
+			newCell = newrow.insertCell(column);
+			newCell.className = "ha-unit";
+			newText = document.createTextNode(unit);
+			newCell.appendChild(newText);
+
+			// Return the sensor row if sensor should be shown.
+			return newrow;
 		}
 
-		// If you want to add the value to the defined name.
-		if (sensordata[4]) {
-			name = name.replace("%v%", newValue);
-		}
-
-		// Removes the value if selected.
-		if (sensordata[10] === false) {
-			newValue = "";
-		}
-
-		// Name
-		column++;
-		newCell = newrow.insertCell(column);
-		newCell.className = "ha-name";
-		newText = document.createTextNode(name);
-		newCell.appendChild(newText);
-
-		// Value
-		column++;
-		newCell = newrow.insertCell(column);
-		newCell.className = "ha-value";
-		if (addblinkhigh > 0) {
-			newrow.className += "blinkhigh";
-		}
-		if (addblinklow > 0) {
-			newrow.className += "blinklow";
-		}
-		newText = document.createTextNode(newValue);
-		newCell.appendChild(newText);
-
-		// Unit
-		column++;
-		newCell = newrow.insertCell(column);
-		newCell.className = "ha-unit";
-		newText = document.createTextNode(unit);
-		newCell.appendChild(newText);
-
+		// Return an empty row if sensor should not be shown.
 		return newrow;
 	},
 

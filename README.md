@@ -81,30 +81,32 @@ The configuration can be very simple, from just displaying a simple value from a
 | `values`             | No | `[]` | Specify specific values from the json feed to only show what you need (entity_id). <br><br> Check the options!|
 
 ## Values options
-| Option               | Type | Description |
-| -------------------- | ---- | ----------- |
-| `sensor`             | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor.|
-| `name`               | `string` | You can specify a name that will be displayed instead of the one from HA.|
-| `divider`            | `number` | You can specify a number (or calculation) that the value should be divided by.|
-| `multiplier`         | `number` | You can specify a number (or calculation) that value should be multiplied by.|
-| `round`              | `boolean` | true or false if you want to round the value to max two decimals.|
-| `displayvalue`       | `boolean` | Set to false to not display the state in the value column. |
-| `useValue`           | `false`   | Set this to true to use the sensor value instead of the sensor state|
-| `displayunit`        | `boolean` | Set to false to not display the unit in the unit column. |
-| `defunit`            | `string` | You can specify a unit that will be displayed instead of the one from HA.|
-| `attribute`          | `string` | You can specify a specific attribute from the sensor that will be displayed instead of the state (attribute can NOT contain a multidimensional array).|
-| `valueSeparator`     | `string` | If your `attribute` is an array, you can specify what to separate the values with here (default is \| (pipe)).|
-| `highAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is higher then this the row will blink and turn red.|
-| `lowAlertThreshold` | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
-| `icons`              | `array` | Define specific icons for spesific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
-| `replace`            | `array` | Define specific values/states that will be owerriden by the specified values.|
-| `notificationName`    | `string` | Name of the notification to send from this notification. Example: "Home" |
+| Option                   | Type | Description |
+| ------------------------ | ---- | ----------- |
+| `sensor`                 | `entity_id` | Entity ID from Home Assistant. Please have a look at the states pages for the unique `entity_id` of your sensor.|
+| `name`                   | `string` | You can specify a name that will be displayed instead of the one from HA.|
+| `divider`                | `number` | You can specify a number (or calculation) that the value should be divided by.|
+| `multiplier`             | `number` | You can specify a number (or calculation) that value should be multiplied by.|
+| `round`                  | `boolean` | true or false if you want to round the value to max two decimals.|
+| `displayvalue`           | `boolean` | Set to false to not display the state in the value column. |
+| `useValue`               | `false`   | Set this to true to use the sensor value instead of the sensor state|
+| `displayunit`            | `boolean` | Set to false to not display the unit in the unit column. |
+| `defunit`                | `string` | You can specify a unit that will be displayed instead of the one from HA.|
+| `attribute`              | `string` | You can specify a specific attribute from the sensor that will be displayed instead of the state (attribute can NOT contain a multidimensional array).|
+| `valueSeparator`         | `string` | If your `attribute` is an array, you can specify what to separate the values with here (default is \| (pipe)).|
+| `highAlertThreshold`     | `number` | You can specify a number, if the value/state of the sensor is higher then this the row will blink and turn red.|
+| `lowAlertThreshold`      | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
+| `highDisplayThreshold`   | `number` | You can specify a number, if the value/state of the sensor is higher then this the sensor will be shown in the table.|
+| `lowDisplayThreshold`    | `number` | You can specify a number, if the value/state of the sensor is lower then this the sensor will be shown in the table.|
+| `icons`                  | `array` | Define specific icons for spesific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
+| `replace`                | `array` | Define specific values/states that will be owerriden by the specified values.|
+| `notificationName`       | `string` | Name of the notification to send from this notification. Example: "Home" |
 | `notificationConditions` | `array` | See section below for details. This is required to send a notification. |
 
 ## NotificationConditions options
 | Option               | Required | Type | Description |
 | -------------------- | -------- | ---- | ----------- |
-| `stateVals` 	       | Yes | `array` | What values the notification should trigger on |
+| `stateVals`          | Yes | `array` | What values the notification should trigger on |
 | `negState`           | No  | `boolean` | True if you want the state to be negated. As in, looking for NOT stateVals. Default `false` |
 | `notificationVal`    | Yes | `Any` | The value of the notification when trigger is met |
 | `notificationValNeg` | No  | `Any` | The value of the notification when trigger is not met (optional) |
@@ -271,29 +273,29 @@ Added the following to my `custom.css` file.
 	module: 'MMM-homeassistant-sensors',
 	position: 'top_left',
 	config: {
-	    host: "IP TO HOME ASSISTANT",
-	    port: "8123",
-	    https: false,
-	    token: "YOUR OWN",
-        // Only sends the notification, does not show any information
-        notificationOnly: true,
-        updateInterval: 15 * 1000, // 15 seconds
-        values: [
-        {
-	        sensor: "sensor.pixel_6a_wifi_connection",
-	        notificationName: "HOME",
-            // Will send a notification titled "HOME", with value true, when the pixel phone connects to a wifi named "MyWifi" or "MyWifi5G"
-            // Will send a notification titled "HOME", with value false, when the pixel phone is not connected to these wifi networks.
-	        notificationConditions: [
-	            {
-		        stateVals: ["MyWifi", "MyWifi5G"],
-		        notificationVal: true,
-		        notificationValNeg: false
-	            },
-	        ]
-        },
-        ]
-    }
+		host: "IP TO HOME ASSISTANT",
+		port: "8123",
+		https: false,
+		token: "YOUR OWN",
+		// Only sends the notification, does not show any information
+		notificationOnly: true,
+		updateInterval: 15 * 1000, // 15 seconds
+		values: [
+			{
+				sensor: "sensor.pixel_6a_wifi_connection",
+				notificationName: "HOME",
+				// Will send a notification titled "HOME", with value true, when the pixel phone connects to a wifi named "MyWifi" or "MyWifi5G"
+				// Will send a notification titled "HOME", with value false, when the pixel phone is not connected to these wifi networks.
+				notificationConditions: [
+					{
+						stateVals: ["MyWifi", "MyWifi5G"],
+						notificationVal: true,
+						notificationValNeg: false
+					}
+				]
+			}
+		]
+	}
 },
 ```
 
