@@ -213,6 +213,7 @@ Module.register("MMM-homeassistant-sensors", {
 						values[i].valueSeparator,
 						values[i].highDisplayThreshold,
 						values[i].lowDisplayThreshold,
+						values[i].displayWhenEqualTo,
 						graph,
 						];
 					// For debugging
@@ -387,7 +388,7 @@ Module.register("MMM-homeassistant-sensors", {
 	// Adding alla the sensors to the table.
 	addValue: function (name, sensordata) {
 	// The array looks like this.
-	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue, [20]attribute (may NOT be a multi dimensional array (yet)), [21]valueSeparator, [22].highDisplayThreshold, [23].lowDisplayThreshold,[24]graph,
+	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue, [20]attribute (may NOT be a multi dimensional array (yet)), [21]valueSeparator, [22].highDisplayThreshold, [23].lowDisplayThreshold, [24].displayWhenEqualTo, [25]graph,
 		var newrow,
 		newText,
 		newCell;
@@ -403,10 +404,12 @@ Module.register("MMM-homeassistant-sensors", {
 		var addsensor = 0;
 		var addhighsensor = 0;
 		var addlowsensor = 0;
+		var addequalsensor = 0;
 
 		// Set the value to the sensors status
 		newValue = sensordata[0];
 		// console.log(newValue);
+		//console.log(sensordata);
 
 		// If higher then display threshold add the sensor to the table.
 		if (!isNaN(sensordata[22])) {
@@ -417,13 +420,20 @@ Module.register("MMM-homeassistant-sensors", {
 
 		// If lower then display threshold add the sensor to the table.
 		if (!isNaN(sensordata[23])) {
+			console.log("here0");
 			if (newValue < sensordata[23]) {
 				addlowsensor = 1;
 			}
 		}
+		// If equal to this string/value/boolian add the sensor to the table.
+		if (typeof sensordata[24] !== 'undefined') {
+			if (newValue == sensordata[24]) {
+				addequalsensor = 1;
+			}
+		}
 
 		// If neither lower or higher display threshold is set add the sensor to the table.
-		if ((isNaN(sensordata[22])) && (isNaN(sensordata[23]))) {
+		if ((isNaN(sensordata[22])) && (isNaN(sensordata[23])) && (typeof sensordata[24] === 'undefined')){
 			addsensor = 1;
 		}
 
@@ -431,7 +441,7 @@ Module.register("MMM-homeassistant-sensors", {
 		newrow = document.createElement("tr");
 
 		// Only add the sensor if any of these are set. 
-		if (addhighsensor == 1 || addlowsensor == 1 || addsensor == 1) {
+		if (addhighsensor == 1 || addlowsensor == 1 || addequalsensor == 1 || addsensor == 1) {
 
 			// Fix the time and date.
 			var thetime = new Date(sensordata[8]);
@@ -587,7 +597,7 @@ Module.register("MMM-homeassistant-sensors", {
 					for (var i = 0; i < sensordata[20].length; i++) {
 						newValue = newValue + sensordata[20][i] + sensordata[21];
 					}
-					if (sensordata[24] === true) {
+					if (sensordata[25] === true) {
 						// Figure out how to make a graph using the chart.js script with an attribute array...
 						console.log("Fix a graph here!");
 					}
