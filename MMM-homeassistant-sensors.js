@@ -214,6 +214,8 @@ Module.register("MMM-homeassistant-sensors", {
 						values[i].highDisplayThreshold,
 						values[i].lowDisplayThreshold,
 						values[i].displayWhenEqualTo,
+						values[i].highDisplayClass,
+						values[i].lowDisplayClass,
 						graph,
 						];
 					// For debugging
@@ -388,7 +390,7 @@ Module.register("MMM-homeassistant-sensors", {
 	// Adding alla the sensors to the table.
 	addValue: function (name, sensordata) {
 	// The array looks like this.
-	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue, [20]attribute (may NOT be a multi dimensional array (yet)), [21]valueSeparator, [22].highDisplayThreshold, [23].lowDisplayThreshold, [24].displayWhenEqualTo, [25]graph,
+	//sensordata = [0]State, [1]unit, [2]icons, [3]replace, [4]displayname, [5]defunit, [6]showdate, [7]showtime, [8]lastupd, [9]picture, [10]displayvalue, [11]divider, [12]multiplier, [13]round, [14]address, [15]displayunit, [16]highAlertThreshold, [17]lowAlertThreshold, [18]Value, [19]useValue, [20]attribute (may NOT be a multi dimensional array (yet)), [21]valueSeparator, [22].highDisplayThreshold, [23].lowDisplayThreshold, [24].displayWhenEqualTo, [25]highDisplayClass, [26]lowDisplayClass, [27]graph,
 		var newrow,
 		newText,
 		newCell;
@@ -597,7 +599,7 @@ Module.register("MMM-homeassistant-sensors", {
 					for (var i = 0; i < sensordata[20].length; i++) {
 						newValue = newValue + sensordata[20][i] + sensordata[21];
 					}
-					if (sensordata[25] === true) {
+					if (sensordata[27] === true) {
 						// Figure out how to make a graph using the chart.js script with an attribute array...
 						console.log("Fix a graph here!");
 					}
@@ -684,11 +686,22 @@ Module.register("MMM-homeassistant-sensors", {
 			newCell = newrow.insertCell(column);
 			newCell.className = "ha-value";
 			if (addblinkhigh > 0) {
-				newrow.className += "blinkhigh";
+				// If high class set, add the class to the sensor.
+				if (typeof sensordata[25] !== 'undefined') {
+					newrow.className += sensordata[25];
+				} else {
+					newrow.className += "blinkhigh";
+				}
 			}
 			if (addblinklow > 0) {
-				newrow.className += "blinklow";
+				// If low class set, add the class to the sensor.
+				if (typeof sensordata[26] !== 'undefined') {
+					newrow.className += sensordata[26];
+				} else {
+					newrow.className += "blinklow";
+				}
 			}
+
 			newText = document.createTextNode(newValue);
 			newCell.appendChild(newText);
 

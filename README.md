@@ -98,6 +98,8 @@ The configuration can be very simple, from just displaying a simple value from a
 | `lowAlertThreshold`      | `number` | You can specify a number, if the value/state of the sensor is lower then this the row will blink and turn blue.|
 | `highDisplayThreshold`   | `number` | You can specify a number, if the value/state of the sensor is higher then this the sensor will be shown in the table.|
 | `lowDisplayThreshold`    | `number` | You can specify a number, if the value/state of the sensor is lower then this the sensor will be shown in the table.|
+| `highDisplayClass`       | `string` | You can specify a class for the high value, if the value of the sensor is higher then the highAlertThreshold this class will be used.|
+| `lowDisplayClass`        | `string` | You can specify a class for the low value, if the value of the sensor is lower then the lowAlertThreshold this class will be used.|
 | `displayWhenEqualTo`     | `string` | You can specify a string/number/boolian, if the value/state of the sensor is equal to what's specified the sensor will be shown in the table.|
 | `icons`                  | `array` | Define specific icons for spesific values/states (see example below). You can use the icon names from the: [MaterialDesignIcons](https://materialdesignicons.com/).|
 | `replace`                | `array` | Define specific values/states that will be owerriden by the specified values.|
