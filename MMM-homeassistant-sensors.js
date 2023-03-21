@@ -85,16 +85,34 @@ Module.register("MMM-homeassistant-sensors", {
 				var stateval = this.getState(data, this.config.controlsensor);
 				// If the control sensor value is anything not the default or not the defined value, hide the module.
 				if ((stateval !== this.config.controlsensorvalue && this.config.controlsensorvalue !== "sensor control disabled")) {
+					if (!this.hidden) {
+						this.hide();
+					}
+				} else {
+					if (this.hidden) {
+						this.show();
+					}
+				}
+/*
+				// *****************************************************************************************
+				//
+				// This below is not working for me, I'm not using pages...
+				// For anyone using pages, please fix so that it works both with and without MMM-Pages... :)
+				// 
+				// *****************************************************************************************
 					// this.hide() does not work well with MMM-Pages, so use wrapper.style.display instead
 					if (wrapper.style.display != "none") {
 						this.visibleStyle = wrapper.style.display;
 						wrapper.style.display = "none";
 					}
 				} else {
+					console.log("here 2");
 					if (wrapper.style.display == "none") {
 						wrapper.style.display = this.visibleStyle;
 					}
 				}
+				// *****************************************************************************************
+*/
 			}
 		}
 
