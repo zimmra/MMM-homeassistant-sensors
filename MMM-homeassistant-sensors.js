@@ -667,7 +667,7 @@ Module.register("MMM-homeassistant-sensors", {
 			// Round the value to two decimals.
 			// Todo: Add a better function for this...
 			if (sensordata[13]) {
-				newValue = Math.round(newValue * 100) / 100;
+				newValue = Math.round(newValue);
 			}
 
 			// If you want to add the value to the defined unit.
